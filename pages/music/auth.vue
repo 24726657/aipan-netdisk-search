@@ -9,7 +9,7 @@
         <a href="/">
           <img
             class="w-[40px] h-[40px]"
-            src="/logo.png"
+            src="/logo-1.png"
             alt="logo"
           />
         </a>
