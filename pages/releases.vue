@@ -58,7 +58,7 @@ useHead({
           </p>
           <h1 class="mt-3 text-4xl font-black tracking-tight md:text-5xl">网站发布日志</h1>
           <p class="mt-4 max-w-2xl text-base leading-7 text-slate-600 dark:text-slate-300">
-            这里记录爱盼近期上线的功能、体验优化和后台能力调整，方便你快速了解网站发生了哪些变化。
+            这里记录米搜近期上线的功能、体验优化和后台能力调整，方便你快速了解网站发生了哪些变化。
           </p>
         </div>
         <button

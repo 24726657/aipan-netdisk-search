@@ -7,7 +7,7 @@ definePageMeta({
 useHead({
   title: '侵权投诉 - AIPAN.ME',
   meta: [
-    { name: 'description', content: '爱盼网盘搜索引擎侵权投诉页面，我们重视知识产权保护，及时处理侵权内容。' },
+    { name: 'description', content: '米搜网盘搜索引擎侵权投诉页面，我们重视知识产权保护，及时处理侵权内容。' },
     { name: 'keywords', content: '侵权投诉,版权保护,内容举报,DMCA' },
   ]
 })

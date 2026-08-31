@@ -108,7 +108,7 @@ const articleCoverUrl = computed(() => {
 
 const articleDescription = computed(() => {
   const plainText = stripMarkdown(blog.value?.content);
-  if (!plainText) return "爱盼博客 - 分享技术、生活和见解";
+  if (!plainText) return "米搜博客 - 分享技术、生活和见解";
   return plainText.length > 150 ? `${plainText.slice(0, 150)}...` : plainText;
 });
 

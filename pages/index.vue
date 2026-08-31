@@ -29,7 +29,7 @@ const DEFAULT_HOME_NAVIGATION = [
     items: [
       { title: "网盘搜索", path: "/search", icon: "fa-search" },
       { title: "磁力搜索", path: "/magnet", icon: "fa-magnet" },
-      { title: "学术搜索", path: "/academic", icon: "fa-graduation-cap" },
+    //   { title: "学术搜索", path: "/academic", icon: "fa-graduation-cap" },
     ],
   },
   {
@@ -39,28 +39,28 @@ const DEFAULT_HOME_NAVIGATION = [
       { title: "音乐下载", path: "/music", icon: "fa-music" },
       { title: "TV直播", path: "/tv", icon: "fa-tv" },
       { title: "AList", path: "/alist", icon: "fa-server" },
-      { title: "小说阅读", path: "/novel", icon: "fa-book" },
+    //   { title: "小说阅读", path: "/novel", icon: "fa-book" },
     ],
   },
-  {
-    id: "tools",
-    name: "实用工具",
-    items: [
-      { title: "图片工具", path: "/image-tools", icon: "fa-image" },
-      { title: "文档转换", path: "/converter", icon: "fa-file-alt" },
-      { title: "二维码生成", path: "/qrcode", icon: "fa-qrcode" },
-      { title: "短链生成", path: "/shorturl", icon: "fa-link" },
-    ],
-  },
-  {
-    id: "learning",
-    name: "学习工具",
-    items: [
-      { title: "英语学习", path: "/english", icon: "fa-language" },
-      { title: "编程学习", path: "/coding", icon: "fa-code" },
-      { title: "在线课程", path: "/courses", icon: "fa-chalkboard-teacher" },
-    ],
-  },
+//   {
+//     id: "tools",
+//     name: "实用工具",
+//     items: [
+//       { title: "图片工具", path: "/image-tools", icon: "fa-image" },
+//       { title: "文档转换", path: "/converter", icon: "fa-file-alt" },
+//       { title: "二维码生成", path: "/qrcode", icon: "fa-qrcode" },
+//       { title: "短链生成", path: "/shorturl", icon: "fa-link" },
+//     ],
+//   },
+//   {
+//     id: "learning",
+//     name: "学习工具",
+//     items: [
+//       { title: "英语学习", path: "/english", icon: "fa-language" },
+//       { title: "编程学习", path: "/coding", icon: "fa-code" },
+//       { title: "在线课程", path: "/courses", icon: "fa-chalkboard-teacher" },
+//     ],
+//   },
   {
     id: "others",
     name: "其他",
@@ -123,10 +123,10 @@ useHead({
       children: JSON.stringify({
         "@context": "https://schema.org",
         "@type": "WebSite",
-        "name": "爱盼",
+        "name": "米搜",
         "alternateName": "AIPAN.ME",
         "url": "https://www.aipan.me",
-        "description": "爱盼是一个开源免费的资源搜索平台，提供网盘资源搜索、音乐下载、TV直播、TVBox接口地址以及博客发布等多项功能",
+        "description": "米搜是一个开源免费的资源搜索平台，提供网盘资源搜索、音乐下载、TV直播、TVBox接口地址以及博客发布等多项功能",
         "potentialAction": {
           "@type": "SearchAction",
           "target": {
@@ -419,7 +419,7 @@ const stopRouteWatcher = watch(
           <div>
             <h1
               class="text-2xl font-bold dark:text-white bg-linear-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 bg-clip-text text-transparent">
-              AIPAN.ME
+              MISO
             </h1>
             <p class="text-gray-600 text-left text-xs dark:text-gray-400">
               {{ $t('subtitle') }}

@@ -66,7 +66,7 @@ console.log(colorMode.preference);
               <p
                 class="text-gray-600 text-[10px] md:text-xs dark:text-gray-400"
               >
-                爱盼 - 资源搜索
+                米搜 - 资源搜索
               </p>
             </div>
           </div>

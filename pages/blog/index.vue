@@ -23,7 +23,7 @@ useHead({
     {
       property: "og:description",
       content:
-        "爱盼博客是一个分享技术、生活和见解的平台。在这里，你可以找到关于编程、技术趋势、生活感悟等多样化的优质内容。",
+        "米搜博客是一个分享技术、生活和见解的平台。在这里，你可以找到关于编程、技术趋势、生活感悟等多样化的优质内容。",
     },
     { property: "og:image", content: "https://www.aipan.me/default-og-image.png" },
     { property: "og:url", content: "https://www.aipan.me/blog" },
@@ -32,7 +32,7 @@ useHead({
     {
       name: "twitter:description",
       content:
-        "爱盼博客是一个分享技术、生活和见解的平台。在这里，你可以找到关于编程、技术趋势、生活感悟等多样化的优质内容。",
+        "米搜博客是一个分享技术、生活和见解的平台。在这里，你可以找到关于编程、技术趋势、生活感悟等多样化的优质内容。",
     },
     { name: "twitter:image", content: "https://www.aipan.me/default-og-image.png" },
     { name: "robots", content: "index,follow" },
@@ -46,7 +46,7 @@ useHead({
         "@context": "https://schema.org",
         "@type": "Blog",
         name: "AIPAN.ME 博客",
-        description: "爱盼博客是一个分享技术、生活和见解的平台。",
+        description: "米搜博客是一个分享技术、生活和见解的平台。",
         url: "https://www.aipan.me/blog",
         publisher: {
           "@type": "Organization",

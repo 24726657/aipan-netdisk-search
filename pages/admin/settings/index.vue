@@ -73,7 +73,7 @@
           <el-form-item label="发件人名称">
             <el-input
               v-model="emailForm.fromName"
-              placeholder="爱盼"
+              placeholder="米搜"
             />
           </el-form-item>
 
@@ -581,7 +581,7 @@ const emailForm = reactive({
   provider: "resend",
   apiKey: "",
   fromEmail: "",
-  fromName: "爱盼",
+  fromName: "米搜",
   replyTo: "",
   siteUrl: "",
   verificationExpireMinutes: 60,
@@ -990,7 +990,7 @@ const getEmailConfig = async () => {
       emailForm.provider = res.data.provider || "resend";
       emailForm.apiKey = "";
       emailForm.fromEmail = res.data.fromEmail || "";
-      emailForm.fromName = res.data.fromName || "爱盼";
+      emailForm.fromName = res.data.fromName || "米搜";
       emailForm.replyTo = res.data.replyTo || "";
       emailForm.siteUrl = res.data.siteUrl || "";
       emailForm.verificationExpireMinutes =

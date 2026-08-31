@@ -61,9 +61,9 @@ const router = useRouter();
 const seoKeyword = computed(() => String(route.query.keyword || ''));
 
 useHead({
-  title: computed(() => seoKeyword.value ? `${seoKeyword.value} - 搜索结果 - 爱盼` : '搜索 - 爱盼'),
+  title: computed(() => seoKeyword.value ? `${seoKeyword.value} - 搜索结果 - 米搜` : '搜索 - 米搜'),
   meta: [
-    { name: 'description', content: computed(() => seoKeyword.value ? `在爱盼搜索“${seoKeyword.value}”的网盘资源结果，支持百度网盘、阿里云盘、夸克网盘等多源搜索。` : '爱盼网盘资源搜索，支持百度网盘、阿里云盘、夸克网盘等多源搜索。') }
+    { name: 'description', content: computed(() => seoKeyword.value ? `在米搜盼搜索“${seoKeyword.value}”的网盘资源结果，支持百度网盘、阿里云盘、夸克网盘等多源搜索。` : '米搜网盘资源搜索，支持百度网盘、阿里云盘、夸克网盘等多源搜索。') }
   ]
 });
 const userStore = useUserStore();

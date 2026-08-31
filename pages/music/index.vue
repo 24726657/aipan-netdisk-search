@@ -10,7 +10,7 @@ definePageMeta({
 });
 
 useSeoMeta({
-  title: '爱盼音乐 - 在线音乐搜索',
+  title: '米搜音乐 - 在线音乐搜索',
   description: '免费在线音乐搜索，支持 FLAC/MP3 无损下载。',
   keywords: '在线音乐,音乐搜索,免费音乐,FLAC无损,音乐下载,在线播放,AIPAN音乐',
 });
@@ -457,7 +457,7 @@ onBeforeUnmount(() => {
           </a>
           <h1
             class="text-[24px] sm:text-[28px] font-serif font-bold bg-clip-text text-transparent bg-linear-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-400">
-            爱盼音乐
+            米搜音乐
           </h1>
         </div>
         <p class="text-gray-500 dark:text-gray-400 text-sm max-w-lg text-center">

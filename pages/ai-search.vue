@@ -108,7 +108,7 @@
                   <img src="/logo.png" alt="Logo" class="w-6 h-6 md:w-8 md:h-8" />
                   <span
                     class="text-base md:text-lg font-semibold bg-linear-to-r from-blue-600 to-blue-400 bg-clip-text text-transparent">AI
-                    爱盼网盘小助手</span>
+                    米搜网盘小助手</span>
                 </a>
               </div>
               <div class="flex items-center space-x-4">
@@ -235,9 +235,9 @@ import { MODERATION_CONTEXTS } from "~/composables/useModerationCheck";
 
 // SEO配置
 useHead({
-  title: 'AI 搜索 - 爱盼',
+  title: 'AI 搜索 - 米搜',
   meta: [
-    { name: 'description', content: '爱盼 AI 智能搜索助手，通过 AI 对话式搜索网盘资源，智能理解你的需求并返回精准结果。' },
+    { name: 'description', content: '米搜 AI 智能搜索助手，通过 AI 对话式搜索网盘资源，智能理解你的需求并返回精准结果。' },
   ]
 })
 

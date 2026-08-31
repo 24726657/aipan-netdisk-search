@@ -7,7 +7,7 @@ definePageMeta({
 useHead({
   title: '免责声明 - AIPAN.ME',
   meta: [
-    { name: 'description', content: '爱盼网盘搜索引擎免责声明，本站仅供学习交流使用，不作任何商业用途。' },
+    { name: 'description', content: '米搜网盘搜索引擎免责声明，本站仅供学习交流使用，不作任何商业用途。' },
     { name: 'keywords', content: '免责声明,使用条款,学习交流,非商业用途' },
   ]
 })

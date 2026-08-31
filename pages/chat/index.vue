@@ -300,9 +300,9 @@ definePageMeta({
 });
 
 useHead({
-  title: "消息中心 - 爱盼",
+  title: "消息中心 - 米搜",
   meta: [
-    { name: "description", content: "爱盼消息中心，支持私信、群聊和公开聊天室。" },
+    { name: "description", content: "米搜消息中心，支持私信、群聊和公开聊天室。" },
   ],
 });
 

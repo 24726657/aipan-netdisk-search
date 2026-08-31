@@ -1,14 +1,14 @@
 {
-  "welcome": "Welcome to AIPAN.ME",
+  "welcome": "Welcome to MISO",
   "search": "Search",
-  "app_title": "AIPAN.ME - All-in-One Resource Aggregation Platform",
+  "app_title": "MISO - All-in-One Resource Aggregation Platform",
   "subtitle": "Cloud Drive Search, Music, Daily Picks, Games & Live TV",
   "search_placeholder": "Enter keywords to search",
   "sensitive_word_alert": "Please do not enter sensitive words",
   "meta": {
-    "title": "AIPAN.ME - All-in-One Resource Aggregation Platform | Cloud Drive Search·Music·Daily Picks·Games·Live TV",
-    "description": "AIPAN.ME is an all-in-one resource aggregation platform for cloud drive search, online music, daily movie picks, live TV, TVBox, casual games, and FM radio.",
-    "keywords": "AIPAN.ME,cloud drive search,resource aggregation,online music,daily movie picks,live TV,FM radio,blog platform,casual games,entertainment platform,music player,TVBox,baidu netdisk,aliyun drive,quark drive,all-in-one"
+    "title": "MISO - All-in-One Resource Aggregation Platform | Cloud Drive Search·Music·Daily Picks·Games·Live TV",
+    "description": "MISO is an all-in-one resource aggregation platform for cloud drive search, online music, daily movie picks, live TV, TVBox, casual games, and FM radio.",
+    "keywords": "MISO,cloud drive search,resource aggregation,online music,daily movie picks,live TV,FM radio,blog platform,casual games,entertainment platform,music player,TVBox,baidu netdisk,aliyun drive,quark drive,all-in-one"
   },
   "broadcast": {
     "message": "Bookmark our site: https://link0.me/aipan"
@@ -53,7 +53,7 @@
     }
   },
   "footer": {
-    "copyright": "© 2026 AIPAN.ME - All-in-One Resource Aggregation Platform",
+    "copyright": "© 2026 MISO - All-in-One Resource Aggregation Platform",
     "links": {
       "about": "About Us",
       "userAgreement": "User Agreement",

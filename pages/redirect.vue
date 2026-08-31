@@ -25,7 +25,7 @@
               AIPAN.ME
             </h1>
             <p class="text-gray-500 text-[10px] md:text-xs dark:text-gray-400">
-              爱盼 - 安全跳转
+              米搜 - 安全跳转
             </p>
           </div>
         </div>
@@ -36,7 +36,7 @@
           @click="goBack"
         >
           <i class="fas fa-arrow-left text-xs"></i>
-          <span>返回爱盼</span>
+          <span>返回米搜</span>
         </button>
       </div>
     </header>
@@ -63,7 +63,7 @@
         <p
           class="text-sm text-gray-500 dark:text-gray-400 leading-relaxed mb-8"
         >
-          当前链接参数没有通过校验，页面不会继续离站。你可以返回爱盼重新检索资源。
+          当前链接参数没有通过校验，页面不会继续离站。你可以返回米搜重新检索资源。
         </p>
         <button
           type="button"
@@ -311,7 +311,7 @@
                   关于出站跳转
                 </p>
                 <p class="text-xs text-gray-500 dark:text-gray-400 leading-relaxed">
-                  爱盼只做公开资源聚合索引，所有外部链接均由用户提交。点击"继续前往"即表示您已了解并同意自行承担访问风险。
+                  米搜只做公开资源聚合索引，所有外部链接均由用户提交。点击"继续前往"即表示您已了解并同意自行承担访问风险。
                 </p>
               </div>
             </div>
@@ -460,11 +460,11 @@ const headlinePrimary = computed(() => {
 
 const targetSubtitle = computed(() => {
   if (targetCategoryName.value === "下载协议") {
-    return `该链接会直接交给系统或下载器处理，不会再进入爱盼站内验证页。继续前请确认本机已安装对应协议处理工具，并核对资源来源。`;
+    return `该链接会直接交给系统或下载器处理，不会再进入米搜站内验证页。继续前请确认本机已安装对应协议处理工具，并核对资源来源。`;
   }
 
   if (targetCategoryName.value === "网盘链接") {
-    return `你即将离开 aipan.me，在当前标签页继续进入 ${targetServiceName.value}。爱盼只做公开资源聚合，不托管文件本身，也不控制目标平台内容。`;
+    return `你即将离开 aipan.me，在当前标签页继续进入 ${targetServiceName.value}。米搜只做公开资源聚合，不托管文件本身，也不控制目标平台内容。`;
   }
 
   return `你即将离开 aipan.me，访问外部站点。请在继续前核对域名、页面意图与资源说明。`;
@@ -532,7 +532,7 @@ const safetyTips = computed(() => {
 });
 
 useHead(() => ({
-  title: `${targetServiceName.value}跳转中 - 爱盼 - aipan.me`,
+  title: `${targetServiceName.value}跳转中 - 米搜 - aipan.me`,
   meta: [
     {
       name: "description",
