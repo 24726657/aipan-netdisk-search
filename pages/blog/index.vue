@@ -53,7 +53,7 @@ useHead({
           name: "MISO",
           logo: {
             "@type": "ImageObject",
-            url: "https://www.aipan.me/logo.png",
+            url: "https://www.aipan.me/logo-1.png",
           },
         },
       }),

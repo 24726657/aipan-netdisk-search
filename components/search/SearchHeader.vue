@@ -54,7 +54,7 @@ console.log(colorMode.preference);
           >
             <img
               class="w-6 h-6 md:w-12 md:h-12 dark:opacity-90"
-              src="/logo.png"
+              src="/logo-1.png"
               alt="logo"
             />
             <div class="text-left hidden md:block">

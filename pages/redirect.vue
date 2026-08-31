@@ -15,7 +15,7 @@
         >
           <img
             class="w-6 h-6 md:w-10 md:h-10 dark:opacity-90"
-            src="/logo.png"
+            src="/logo-1.png"
             alt="logo"
           />
           <div class="text-left hidden md:block">

@@ -3,7 +3,7 @@
     <div class="max-w-md w-full">
       <!-- Logo和标题 -->
       <div class="text-center mb-8">
-        <img src="/logo.png" alt="Logo" class="w-16 h-16 mx-auto mb-4" />
+        <img src="/logo-1.png" alt="Logo" class="w-16 h-16 mx-auto mb-4" />
         <h1 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">{{ pageTitle }}</h1>
         <p class="text-gray-600 dark:text-gray-400">{{ pageSubtitle }}</p>
       </div>

@@ -85,7 +85,7 @@ export default defineNuxtConfig({
       },
       link: [
         { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
-        { rel: 'preload', as: 'image', type: 'image/webp', href: '/logo.webp', fetchpriority: 'high' },
+        { rel: 'preload', as: 'image', type: 'image/webp', href: '/logo-1.webp', fetchpriority: 'high' },
       ],
       meta: [
         { charset: 'utf-8' },
@@ -209,10 +209,10 @@ export default defineNuxtConfig({
       wasm: true,
     },
     routeRules: {
-      '/logo.png': {
+      '/logo-1.png': {
         headers: { 'Cache-Control': 'public, max-age=31536000, immutable' },
       },
-      '/logo.webp': {
+      '/logo-1.webp': {
         headers: { 'Cache-Control': 'public, max-age=31536000, immutable' },
       },
     }

@@ -105,7 +105,7 @@
                   <i class="fas fa-bars text-gray-600 dark:text-gray-300"></i>
                 </button>
                 <a class="flex items-center space-x-2" href="/">
-                  <img src="/logo.png" alt="Logo" class="w-6 h-6 md:w-8 md:h-8" />
+                  <img src="/logo-1.png" alt="Logo" class="w-6 h-6 md:w-8 md:h-8" />
                   <span
                     class="text-base md:text-lg font-semibold bg-linear-to-r from-blue-600 to-blue-400 bg-clip-text text-transparent">AI
                     米搜网盘小助手</span>
