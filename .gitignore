@@ -37,3 +37,4 @@ public/image-cache/*
 *.sql
 !prisma/migrations/**/*.sql
 .playwright-mcp
+generated/

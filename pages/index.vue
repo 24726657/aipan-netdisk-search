@@ -28,7 +28,7 @@ const DEFAULT_HOME_NAVIGATION = [
     name: "搜索工具",
     items: [
       { title: "网盘搜索", path: "/search", icon: "fa-search" },
-      { title: "磁力搜索", path: "/magnet", icon: "fa-magnet" },
+    //   { title: "磁力搜索", path: "/magnet", icon: "fa-magnet" },
     //   { title: "学术搜索", path: "/academic", icon: "fa-graduation-cap" },
     ],
   },
@@ -36,7 +36,7 @@ const DEFAULT_HOME_NAVIGATION = [
     id: "entertainment",
     name: "娱乐工具",
     items: [
-      { title: "音乐下载", path: "/music", icon: "fa-music" },
+    //   { title: "音乐下载", path: "/music", icon: "fa-music" },
       { title: "TV直播", path: "/tv", icon: "fa-tv" },
       { title: "AList", path: "/alist", icon: "fa-server" },
     //   { title: "小说阅读", path: "/novel", icon: "fa-book" },
