@@ -499,7 +499,7 @@ const countdownDescription = computed(() => {
 const metaItems = computed(() => [
   { label: "资源类型", value: targetCategoryName.value },
   { label: "目标站点", value: targetHost.value },
-  { label: "来源", value: "aipan.me" },
+  { label: "来源", value: "miso" },
 ]);
 
 const safetyTips = computed(() => {
@@ -532,11 +532,11 @@ const safetyTips = computed(() => {
 });
 
 useHead(() => ({
-  title: `${targetServiceName.value}跳转中 - 米搜 - aipan.me`,
+  title: `${targetServiceName.value}跳转中 - 米搜 - miso`,
   meta: [
     {
       name: "description",
-      content: `即将离开 aipan.me 前往 ${targetServiceName.value}，请在跳转前核对目标链接与安全提示。`,
+      content: `即将离开 miso 前往 ${targetServiceName.value}，请在跳转前核对目标链接与安全提示。`,
     },
     { name: "robots", content: "noindex,nofollow" },
   ],
