@@ -26,12 +26,12 @@ export const publicNavigation: PublicNavigationItem[] = [
     labelKey: "header.navItems.media",
     icon: "fa-solid fa-clapperboard",
     children: [
-      {
-        key: "music",
-        labelKey: "header.navItems.music",
-        path: "/music",
-        icon: "fa-solid fa-music",
-      },
+    //   {
+    //     key: "music",
+    //     labelKey: "header.navItems.music",
+    //     path: "/music",
+    //     icon: "fa-solid fa-music",
+    //   },
       {
         key: "tv",
         labelKey: "header.navItems.tv",
