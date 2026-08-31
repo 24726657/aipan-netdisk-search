@@ -136,19 +136,19 @@
             管理您投稿的文章
           </el-button>
         </div>
-        <div class="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm hover:shadow-md transition-all">
-          <div class="flex items-center justify-between mb-4">
-            <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-200">音乐验证码</h2>
-            <el-icon class="text-2xl text-orange-500">
-              <i class="fas fa-music"></i>
-            </el-icon>
-          </div>
-          <p class="text-gray-500 dark:text-gray-400 mb-4">获取当前音乐页面验证码</p>
-          <el-button type="primary" @click="getMusicPassword" class="w-full" :loading="musicPasswordLoading">
-            <i class="fas fa-key mr-1"></i>
-            获取验证码
-          </el-button>
-        </div>
+        <!--<div class="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm hover:shadow-md transition-all">-->
+        <!--  <div class="flex items-center justify-between mb-4">-->
+        <!--    <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-200">音乐验证码</h2>-->
+        <!--    <el-icon class="text-2xl text-orange-500">-->
+        <!--      <i class="fas fa-music"></i>-->
+        <!--    </el-icon>-->
+        <!--  </div>-->
+        <!--  <p class="text-gray-500 dark:text-gray-400 mb-4">获取当前音乐页面验证码</p>-->
+        <!--  <el-button type="primary" @click="getMusicPassword" class="w-full" :loading="musicPasswordLoading">-->
+        <!--    <i class="fas fa-key mr-1"></i>-->
+        <!--    获取验证码-->
+        <!--  </el-button>-->
+        <!--</div>-->
       </div>
 
       <!-- 最近活动 -->
