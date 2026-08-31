@@ -405,10 +405,10 @@ const stopRouteWatcher = watch(
       <div class="flex flex-col items-center justify-center gap-4 md:mt-[80px] mt-[30px]">
         <div class="flex items-center justify-center gap-2">
           <picture class="block w-16 h-16 md:w-22 md:h-22">
-            <source srcset="/logo.webp" type="image/webp" />
+            <source srcset="/logo-1.webp" type="image/webp" />
             <img
               class="w-full h-full dark:opacity-90"
-              src="/logo.png"
+              src="/logo-1.png"
               width="96"
               height="96"
               alt="logo"
