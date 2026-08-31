@@ -32,7 +32,9 @@ const rateLimiter = createRateLimiter({ windowMs: 60_000, maxRequests: 20 });
 const isAllowedDomain = (host: string, referer: string) =>
   host.endsWith("aipan.me") ||
   referer.includes("aipan.me") ||
-  host.includes("localhost");
+  host.includes("localhost") ||
+  host.endsWith("sjdh898.top") ||
+  referer.includes("sjdh898.top");
 
 export default defineEventHandler(
   async (event: H3Event): Promise<TransformedResult> => {
