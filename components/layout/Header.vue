@@ -120,7 +120,7 @@ onBeforeUnmount(() => {
           <div
             class="flex cursor-pointer items-center justify-center gap-2 md:gap-2 hover:scale-105 transition-transform duration-300"
             @click="goHome()">
-            <img class="w-6 h-6 md:w-12 md:h-12 dark:opacity-90" src="/logo.png" alt="logo" />
+            <!--<img class="w-6 h-6 md:w-12 md:h-12 dark:opacity-90" src="/logo.png" alt="logo" />-->
             <div class="text-left">
               <h1
                 class="text-xs md:text-sm font-bold bg-linear-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 bg-clip-text text-transparent">
