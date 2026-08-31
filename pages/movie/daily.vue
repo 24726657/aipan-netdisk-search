@@ -47,7 +47,7 @@ const shouldShowAccessNotice = computed(() => {
 
 // SEO配置
 useHead({
-    title: computed(() => movieInfo.value?.电影名称 ? `${movieInfo.value.电影名称} - 每日电影推荐 | AIPAN.ME` : '每日电影推荐 | AIPAN.ME'),
+    title: computed(() => movieInfo.value?.电影名称 ? `${movieInfo.value.电影名称} - 每日电影推荐 | MISO` : '每日电影推荐 | MISO'),
     meta: [
         {
             name: 'description',
@@ -69,7 +69,7 @@ useHead({
         { property: 'og:type', content: 'article' },
         {
             property: 'og:title',
-            content: computed(() => movieInfo.value?.电影名称 ? `${movieInfo.value.电影名称} - 每日电影推荐` : '每日电影推荐 | AIPAN.ME')
+            content: computed(() => movieInfo.value?.电影名称 ? `${movieInfo.value.电影名称} - 每日电影推荐` : '每日电影推荐 | MISO')
         },
         {
             property: 'og:description',
@@ -87,7 +87,7 @@ useHead({
         { name: 'twitter:card', content: 'summary_large_image' },
         {
             name: 'twitter:title',
-            content: computed(() => movieInfo.value?.电影名称 ? `${movieInfo.value.电影名称} - 每日电影推荐` : '每日电影推荐 | AIPAN.ME')
+            content: computed(() => movieInfo.value?.电影名称 ? `${movieInfo.value.电影名称} - 每日电影推荐` : '每日电影推荐 | MISO')
         },
         {
             name: 'twitter:description',
@@ -103,7 +103,7 @@ useHead({
         },
         // 其他重要的meta标签
         { name: 'robots', content: 'index,follow' },
-        { name: 'author', content: 'AIPAN.ME' },
+        { name: 'author', content: 'MISO' },
         {
             name: 'article:published_time',
             content: computed(() => movieInfo.value?.上映日期 || new Date().toISOString())

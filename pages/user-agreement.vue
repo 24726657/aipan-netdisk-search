@@ -5,9 +5,9 @@ definePageMeta({
 
 // SEO配置
 useHead({
-  title: '用户服务协议 - AIPAN.ME',
+  title: '用户服务协议 - MISO',
   meta: [
-    { name: 'description', content: 'AIPAN.ME用户服务协议，详细说明用户权利与义务、服务条款、免责声明等重要内容。' },
+    { name: 'description', content: 'MISO用户服务协议，详细说明用户权利与义务、服务条款、免责声明等重要内容。' },
     { name: 'keywords', content: '用户协议,服务条款,使用规则,法律声明,AIPAN' },
   ]
 })
@@ -33,7 +33,7 @@ useHead({
               <i class="fas fa-exclamation-circle mr-2"></i>重要提示
             </h2>
             <p class="text-gray-700 dark:text-gray-300 leading-relaxed">
-              在使用 AIPAN.ME（以下简称"本站"或"我们"）提供的服务之前，请您务必仔细阅读并充分理解本协议的全部内容。
+              在使用 MISO（以下简称"本站"或"我们"）提供的服务之前，请您务必仔细阅读并充分理解本协议的全部内容。
               <strong>您点击"同意"按钮或实际使用本站服务，即表示您已阅读、理解并同意接受本协议的约束。</strong>
               如您不同意本协议的任何内容，请立即停止使用本站服务。
             </p>
@@ -46,7 +46,7 @@ useHead({
             </h2>
             <div class="space-y-3 pl-4">
               <p><strong>1.1 协议范围</strong></p>
-              <p>本协议是您与 AIPAN.ME 之间关于使用本站服务所订立的协议。本站提供的服务包括但不限于：网盘资源搜索、在线视频播放、音乐播放、博客系统、聊天功能等。</p>
+              <p>本协议是您与 MISO 之间关于使用本站服务所订立的协议。本站提供的服务包括但不限于：网盘资源搜索、在线视频播放、音乐播放、博客系统、聊天功能等。</p>
               
               <p><strong>1.2 协议修改</strong></p>
               <p>我们有权根据业务调整或法律法规要求随时修改本协议。修改后的协议将在本站公布，并在公布之日起生效。如您在协议修改后继续使用本站服务，即视为您已接受修改后的协议。建议您定期查看本协议内容。</p>
@@ -310,7 +310,7 @@ useHead({
           <div class="bg-blue-50 dark:bg-blue-900/30 rounded-lg p-5 border-l-4 border-blue-500 mt-8">
             <p class="text-gray-700 dark:text-gray-300 leading-relaxed">
               <i class="fas fa-check-circle mr-2 text-blue-500"></i>
-              <strong>再次提醒：</strong>本协议是您与 AIPAN.ME 之间具有法律效力的文件。
+              <strong>再次提醒：</strong>本协议是您与 MISO 之间具有法律效力的文件。
               请您务必仔细阅读、充分理解各条款内容，特别是免责条款和法律适用条款。
               如您继续使用本站服务，即表示您已完全理解并同意遵守本协议的全部内容。
             </p>

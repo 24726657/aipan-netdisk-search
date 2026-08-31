@@ -19,7 +19,7 @@ useHead({
       content: "AIPAN博客,技术博客,编程教程,开发经验,技术分享,生活感悟",
     },
     { property: "og:type", content: "website" },
-    { property: "og:title", content: "AIPAN.ME 博客 - 分享技术、生活和见解" },
+    { property: "og:title", content: "MISO 博客 - 分享技术、生活和见解" },
     {
       property: "og:description",
       content:
@@ -28,7 +28,7 @@ useHead({
     { property: "og:image", content: "https://www.aipan.me/default-og-image.png" },
     { property: "og:url", content: "https://www.aipan.me/blog" },
     { name: "twitter:card", content: "summary_large_image" },
-    { name: "twitter:title", content: "AIPAN.ME 博客 - 分享技术、生活和见解" },
+    { name: "twitter:title", content: "MISO 博客 - 分享技术、生活和见解" },
     {
       name: "twitter:description",
       content:
@@ -36,7 +36,7 @@ useHead({
     },
     { name: "twitter:image", content: "https://www.aipan.me/default-og-image.png" },
     { name: "robots", content: "index,follow" },
-    { name: "author", content: "AIPAN.ME" },
+    { name: "author", content: "MISO" },
   ],
   link: [{ rel: "canonical", href: "https://www.aipan.me/blog" }],
   script: [
@@ -45,12 +45,12 @@ useHead({
       children: JSON.stringify({
         "@context": "https://schema.org",
         "@type": "Blog",
-        name: "AIPAN.ME 博客",
+        name: "MISO 博客",
         description: "米搜博客是一个分享技术、生活和见解的平台。",
         url: "https://www.aipan.me/blog",
         publisher: {
           "@type": "Organization",
-          name: "AIPAN.ME",
+          name: "MISO",
           logo: {
             "@type": "ImageObject",
             url: "https://www.aipan.me/logo.png",

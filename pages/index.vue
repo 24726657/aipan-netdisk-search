@@ -113,7 +113,7 @@ useHead({
     { name: "twitter:image", content: "https://www.aipan.me/default-og-image.png" },
     // 其他重要的meta标签
     { name: "robots", content: "index,follow" },
-    { name: "author", content: "AIPAN.ME" },
+    { name: "author", content: "MISO" },
     { name: "viewport", content: "width=device-width, initial-scale=1" },
   ],
   link: [{ rel: "canonical", href: "https://www.aipan.me" }],
@@ -124,7 +124,7 @@ useHead({
         "@context": "https://schema.org",
         "@type": "WebSite",
         "name": "米搜",
-        "alternateName": "AIPAN.ME",
+        "alternateName": "MISO",
         "url": "https://www.aipan.me",
         "description": "米搜是一个开源免费的资源搜索平台，提供网盘资源搜索、音乐下载、TV直播、TVBox接口地址以及博客发布等多项功能",
         "potentialAction": {
@@ -137,7 +137,7 @@ useHead({
         },
         "publisher": {
           "@type": "Organization",
-          "name": "AIPAN.ME",
+          "name": "MISO",
           "url": "https://www.aipan.me"
         },
         "sameAs": [

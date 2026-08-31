@@ -125,7 +125,7 @@ const handleCoverError = (event) => {
 // SEO配置
 useHead({
   title: computed(() =>
-    blog.value?.title ? `${blog.value.title} | AIPAN.ME 博客` : "AIPAN.ME 博客"
+    blog.value?.title ? `${blog.value.title} | MISO 博客` : "MISO 博客"
   ),
   meta: [
     {
@@ -135,7 +135,7 @@ useHead({
     {
       name: "keywords",
       content: computed(() => {
-        const keywords = ["博客", "AIPAN.ME"];
+        const keywords = ["博客", "MISO"];
         if (blog.value?.categories) {
           keywords.push(...blog.value.categories.map((c) => c.category.name));
         }
@@ -151,8 +151,8 @@ useHead({
       property: "og:title",
       content: computed(() =>
         blog.value?.title
-          ? `${blog.value.title} | AIPAN.ME 博客`
-          : "AIPAN.ME 博客"
+          ? `${blog.value.title} | MISO 博客`
+          : "MISO 博客"
       ),
     },
     {
@@ -173,8 +173,8 @@ useHead({
       name: "twitter:title",
       content: computed(() =>
         blog.value?.title
-          ? `${blog.value.title} | AIPAN.ME 博客`
-          : "AIPAN.ME 博客"
+          ? `${blog.value.title} | MISO 博客`
+          : "MISO 博客"
       ),
     },
     {
@@ -189,7 +189,7 @@ useHead({
     { name: "robots", content: "index,follow" },
     {
       name: "author",
-      content: computed(() => blog.value?.creator?.username || "AIPAN.ME"),
+      content: computed(() => blog.value?.creator?.username || "MISO"),
     },
     {
       name: "article:published_time",
@@ -233,11 +233,11 @@ useHead({
           image: articleCoverUrl.value,
           author: {
             "@type": "Person",
-            name: blog.value.creator?.username || "AIPAN.ME",
+            name: blog.value.creator?.username || "MISO",
           },
           publisher: {
             "@type": "Organization",
-            name: "AIPAN.ME",
+            name: "MISO",
             logo: {
               "@type": "ImageObject",
               url: "https://www.aipan.me/logo.png",

@@ -4,9 +4,9 @@ definePageMeta({
 });
 
 useHead({
-  title: '隐私政策 - AIPAN.ME',
+  title: '隐私政策 - MISO',
   meta: [
-    { name: 'description', content: 'AIPAN.ME隐私政策，详细说明个人信息的收集、使用、存储、保护及用户权利。' },
+    { name: 'description', content: 'MISO隐私政策，详细说明个人信息的收集、使用、存储、保护及用户权利。' },
     { name: 'keywords', content: '隐私政策,个人信息保护,数据安全,GDPR,用户权利' },
   ]
 })
@@ -32,7 +32,7 @@ useHead({
               <i class="fas fa-shield-alt mr-2"></i>隐私保护承诺
             </h2>
             <p class="text-gray-700 dark:text-gray-300 leading-relaxed mb-3">
-              AIPAN.ME（以下简称"我们"）深知个人信息对您的重要性，我们将按照法律法规要求，采取安全保护措施，保护您的个人信息安全可控。
+              MISO（以下简称"我们"）深知个人信息对您的重要性，我们将按照法律法规要求，采取安全保护措施，保护您的个人信息安全可控。
             </p>
             <p class="text-gray-700 dark:text-gray-300"><strong>本隐私政策将帮助您了解：</strong></p>
             <ul class="list-disc list-inside space-y-1 ml-4 mt-2 text-gray-700 dark:text-gray-300">
@@ -264,7 +264,7 @@ useHead({
                 <p class="font-bold text-gray-900 dark:text-white mb-2">感谢您的信任</p>
                 <p class="text-gray-700 dark:text-gray-300 leading-relaxed">
                   我们承诺严格遵守本隐私政策的各项约定，保护您的个人信息安全。
-                  如您继续使用 AIPAN.ME 的服务，即表示您已阅读、理解并同意本隐私政策的全部内容。
+                  如您继续使用 MISO 的服务，即表示您已阅读、理解并同意本隐私政策的全部内容。
                 </p>
               </div>
             </div>

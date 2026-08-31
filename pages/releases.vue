@@ -33,16 +33,16 @@ watch(
 );
 
 useHead({
-  title: "发布日志 - AIPAN.ME",
+  title: "发布日志 - MISO",
   meta: [
     {
       name: "description",
       content:
-        "查看 AIPAN.ME 最新功能发布、用户投稿自动审核、搜索体验和后台管理更新记录。",
+        "查看 MISO 最新功能发布、用户投稿自动审核、搜索体验和后台管理更新记录。",
     },
     {
       name: "keywords",
-      content: "AIPAN.ME发布日志,功能更新,用户投稿,自动审核,ES搜索",
+      content: "MISO发布日志,功能更新,用户投稿,自动审核,ES搜索",
     },
   ],
 });

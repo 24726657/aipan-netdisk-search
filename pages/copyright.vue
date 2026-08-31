@@ -5,7 +5,7 @@ definePageMeta({
 
 // SEO配置
 useHead({
-  title: '侵权投诉 - AIPAN.ME',
+  title: '侵权投诉 - MISO',
   meta: [
     { name: 'description', content: '米搜网盘搜索引擎侵权投诉页面，我们重视知识产权保护，及时处理侵权内容。' },
     { name: 'keywords', content: '侵权投诉,版权保护,内容举报,DMCA' },
@@ -23,7 +23,7 @@ useHead({
         
         <div class="space-y-6 text-gray-600 dark:text-gray-300">
           <p class="leading-relaxed">
-            AIPAN.ME 重视知识产权保护，我们会认真对待所有的侵权投诉请求。如果您发现本站的搜索结果中包含侵犯您知识产权的内容，请通过以下方式联系我们：
+            MISO 重视知识产权保护，我们会认真对待所有的侵权投诉请求。如果您发现本站的搜索结果中包含侵犯您知识产权的内容，请通过以下方式联系我们：
           </p>
 
           <div class="bg-blue-50 dark:bg-blue-900/30 rounded-lg p-4 space-y-2">
@@ -39,7 +39,7 @@ useHead({
           <div class="bg-green-50 dark:bg-green-900/30 rounded-lg p-4 space-y-2">
             <h2 class="font-semibold text-green-700 dark:text-green-300">关于本站：</h2>
             <div class="space-y-2 text-gray-700 dark:text-gray-300">
-              <p class="leading-relaxed">AIPAN.ME 不仅是一个搜索引擎网站，更是一个创意实践的技术乐园。这里承载着开发者的奇思妙想，每一个有趣的想法都可能在这里落地生根。我们的愿景是：</p>
+              <p class="leading-relaxed">MISO 不仅是一个搜索引擎网站，更是一个创意实践的技术乐园。这里承载着开发者的奇思妙想，每一个有趣的想法都可能在这里落地生根。我们的愿景是：</p>
               <ul class="list-disc list-inside space-y-2">
                 <li>将创意转化为现实，让每个有趣的想法都有实现的可能</li>
                 <li>以学习为核心目的，探索和实践最新的网站开发技术</li>
@@ -53,7 +53,7 @@ useHead({
           <div class="bg-purple-50 dark:bg-purple-900/30 rounded-lg p-4 space-y-2">
             <h2 class="font-semibold text-purple-700 dark:text-purple-300">免责声明：</h2>
             <div class="space-y-2 text-gray-700 dark:text-gray-300">
-              <p>AIPAN.ME 是一个学习工具，我们：</p>
+              <p>MISO 是一个学习工具，我们：</p>
               <ul class="list-disc list-inside space-y-2">
                 <li>不存储、上传、复制或传播任何资源文件</li>
                 <li>仅作为信息检索工具，展示来自互联网的搜索结果</li>

@@ -61,7 +61,7 @@ console.log(colorMode.preference);
               <h1
                 class="text-xs md:text-sm font-bold bg-linear-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 bg-clip-text text-transparent"
               >
-                AIPAN.ME
+                MISO
               </h1>
               <p
                 class="text-gray-600 text-[10px] md:text-xs dark:text-gray-400"

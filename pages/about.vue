@@ -5,9 +5,9 @@ definePageMeta({
 
 // SEO配置
 useHead({
-  title: '关于网站 - AIPAN.ME',
+  title: '关于网站 - MISO',
   meta: [
-    { name: 'description', content: 'AIPAN.ME 是一个创意实践的技术平台，集搜索引擎和创新功能于一体，专注于技术学习和实践。' },
+    { name: 'description', content: 'MISO 是一个创意实践的技术平台，集搜索引擎和创新功能于一体，专注于技术学习和实践。' },
     { name: 'keywords', content: '关于我们,技术学习,创新平台,Nuxt.js,Docker,SEO' },
   ]
 })
@@ -18,13 +18,13 @@ useHead({
     <div class="max-w-3xl mx-auto px-4">
       <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 md:p-8">
         <h1 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-6 text-center">
-          关于 AIPAN.ME
+          关于 MISO
         </h1>
         
         <div class="space-y-6 text-gray-600 dark:text-gray-300">
           <div class="bg-linear-to-r from-blue-50 to-purple-50 dark:from-blue-900/30 dark:to-purple-900/30 rounded-lg p-6">
             <p class="text-lg leading-relaxed">
-              AIPAN.ME 是一个创意实践的技术乐园。这里承载着开发者的奇思妙想，每一个有趣的想法都可能在这里落地生根。
+              MISO 是一个创意实践的技术乐园。这里承载着开发者的奇思妙想，每一个有趣的想法都可能在这里落地生根。
             </p>
           </div>
 
