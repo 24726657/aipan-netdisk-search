@@ -425,7 +425,8 @@ export const ModelName = {
   DailyRedemptionDropClaim: 'DailyRedemptionDropClaim',
   NavigationCategory: 'NavigationCategory',
   NavigationItem: 'NavigationItem',
-  Report: 'Report'
+  Report: 'Report',
+  Ad: 'Ad'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -441,7 +442,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "resourceType" | "resource" | "post" | "postCategory" | "postToCategory" | "alist" | "comment" | "blogCategory" | "blogPostToCategory" | "blogPost" | "userResource" | "systemSettings" | "searchRecord" | "dailySearchStats" | "userVodConfig" | "tvboxSource" | "emailVerificationToken" | "notification" | "chatRoom" | "chatRoomUser" | "chatMessage" | "checkIn" | "pointsHistory" | "transferPointGrant" | "pointTask" | "pointTaskCompletion" | "registrationGiftGrant" | "redemptionCodeCampaign" | "redemptionCode" | "redemptionCodeRedemption" | "dailyRedemptionDrop" | "dailyRedemptionDropClaim" | "navigationCategory" | "navigationItem" | "report"
+    modelProps: "user" | "resourceType" | "resource" | "post" | "postCategory" | "postToCategory" | "alist" | "comment" | "blogCategory" | "blogPostToCategory" | "blogPost" | "userResource" | "systemSettings" | "searchRecord" | "dailySearchStats" | "userVodConfig" | "tvboxSource" | "emailVerificationToken" | "notification" | "chatRoom" | "chatRoomUser" | "chatMessage" | "checkIn" | "pointsHistory" | "transferPointGrant" | "pointTask" | "pointTaskCompletion" | "registrationGiftGrant" | "redemptionCodeCampaign" | "redemptionCode" | "redemptionCodeRedemption" | "dailyRedemptionDrop" | "dailyRedemptionDropClaim" | "navigationCategory" | "navigationItem" | "report" | "ad"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -3109,6 +3110,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    Ad: {
+      payload: Prisma.$AdPayload<ExtArgs>
+      fields: Prisma.AdFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.AdFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.AdFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdPayload>
+        }
+        findFirst: {
+          args: Prisma.AdFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.AdFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdPayload>
+        }
+        findMany: {
+          args: Prisma.AdFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdPayload>[]
+        }
+        create: {
+          args: Prisma.AdCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdPayload>
+        }
+        createMany: {
+          args: Prisma.AdCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.AdCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdPayload>[]
+        }
+        delete: {
+          args: Prisma.AdDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdPayload>
+        }
+        update: {
+          args: Prisma.AdUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdPayload>
+        }
+        deleteMany: {
+          args: Prisma.AdDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.AdUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.AdUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdPayload>[]
+        }
+        upsert: {
+          args: Prisma.AdUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdPayload>
+        }
+        aggregate: {
+          args: Prisma.AdAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateAd>
+        }
+        groupBy: {
+          args: Prisma.AdGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AdGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.AdCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AdCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -3672,6 +3747,21 @@ export const ReportScalarFieldEnum = {
 export type ReportScalarFieldEnum = (typeof ReportScalarFieldEnum)[keyof typeof ReportScalarFieldEnum]
 
 
+export const AdScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  imageUrl: 'imageUrl',
+  linkUrl: 'linkUrl',
+  sortOrder: 'sortOrder',
+  status: 'status',
+  type: 'type',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type AdScalarFieldEnum = (typeof AdScalarFieldEnum)[keyof typeof AdScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -3917,6 +4007,7 @@ export type GlobalOmitConfig = {
   navigationCategory?: Prisma.NavigationCategoryOmit
   navigationItem?: Prisma.NavigationItemOmit
   report?: Prisma.ReportOmit
+  ad?: Prisma.AdOmit
 }
 
 /* Types for Logging */

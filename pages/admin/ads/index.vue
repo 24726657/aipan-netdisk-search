@@ -6,15 +6,30 @@
     </div>
 
     <el-table :data="ads" border style="width: 100%">
-      <el-table-column prop="id" label="ID" width="60" />
-      <el-table-column prop="title" label="标题" min-width="150" />
+      <el-table-column prop="id" label="ID" width="60"></el-table-column>
+      <el-table-column prop="title" label="标题" min-width="150"></el-table-column>
       <el-table-column label="图片" width="120">
         <template #default="{ row }">
-          <img :src="row.imageUrl" class="h-12 w-20 object-cover rounded" />
+          <img v-if="row.imageUrl" :src="row.imageUrl" class="h-12 w-20 object-cover rounded" />
+          <span v-else class="text-xs text-gray-400">无图片</span>
         </template>
       </el-table-column>
-      <el-table-column prop="linkUrl" label="链接" min-width="150" show-overflow-tooltip />
-      <el-table-column prop="sortOrder" label="排序" width="80" />
+      <el-table-column prop="linkUrl" label="链接" min-width="150" show-overflow-tooltip></el-table-column>
+      <el-table-column label="类型" width="100">
+        <template #default="{ row }">
+          <el-tag :type="row.type === 'text' ? 'warning' : 'primary'" size="small">
+            {{ row.type === 'text' ? '文字' : '图片' }}
+          </el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column label="位置" width="140">
+        <template #default="{ row }">
+          <el-tag :type="getPositionType(row)" size="small">
+            {{ getPositionName(row) }}
+          </el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column prop="sortOrder" label="排序值" width="80"></el-table-column>
       <el-table-column label="状态" width="100">
         <template #default="{ row }">
           <el-tag :type="row.status ? 'success' : 'danger'">
@@ -33,23 +48,40 @@
       </el-table-column>
     </el-table>
 
-    <!-- 添加/编辑对话框 -->
-    <el-dialog v-model="dialogVisible" :title="dialogTitle" width="500px">
+    <el-dialog v-model="dialogVisible" :title="dialogTitle" width="550px" top="5vh">
       <el-form :model="form" label-width="100px">
         <el-form-item label="标题">
-          <el-input v-model="form.title" />
+          <el-input v-model="form.title"></el-input>
         </el-form-item>
-        <el-form-item label="图片链接">
-          <el-input v-model="form.imageUrl" placeholder="https://example.com/ad.jpg" />
+        <!-- 图片链接：仅在图片广告时显示 -->
+        <el-form-item v-if="form.type === 'image'" label="图片链接">
+          <el-input v-model="form.imageUrl" placeholder="https://example.com/ad.jpg"></el-input>
         </el-form-item>
         <el-form-item label="跳转链接">
-          <el-input v-model="form.linkUrl" placeholder="https://example.com" />
+          <el-input v-model="form.linkUrl" placeholder="https://example.com"></el-input>
         </el-form-item>
-        <el-form-item label="排序">
-          <el-input-number v-model="form.sortOrder" :min="0" />
+        <!-- 类型 -->
+        <el-form-item label="类型">
+          <el-radio-group v-model="form.type" @change="onTypeChange">
+            <el-radio-button label="image">图片广告</el-radio-button>
+            <el-radio-button label="text">文字广告</el-radio-button>
+          </el-radio-group>
+        </el-form-item>
+        <!-- 位置（根据类型动态变化） -->
+        <el-form-item label="位置">
+          <el-radio-group v-model="form.sortOrder">
+            <el-radio-button
+              v-for="option in currentPositionOptions"
+              :key="option.value"
+              :label="option.value"
+            >
+              {{ option.label }}
+            </el-radio-button>
+          </el-radio-group>
+          <div class="text-xs text-gray-400 mt-1">选择后自动设置排序值</div>
         </el-form-item>
         <el-form-item label="状态">
-          <el-switch v-model="form.status" />
+          <el-switch v-model="form.status"></el-switch>
         </el-form-item>
       </el-form>
       <template #footer>
@@ -61,23 +93,58 @@
 </template>
 
 <script setup>
-import { ref, onMounted, reactive } from 'vue'
+definePageMeta({
+  layout: 'admin'
+})
+
+import { ref, onMounted, reactive, computed } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 
 // ============================================================
-// 获取 Token（从 Cookie 或 localStorage）
+// 位置配置
+// ============================================================
+// 图片广告位置（4个）
+const imagePositionMap = {
+  0: { name: '顶部横幅', type: 'primary' },
+  1: { name: '网格1', type: 'success' },
+  2: { name: '网格2', type: 'warning' },
+  3: { name: '网格3', type: 'info' },
+}
+
+// 文字广告位置（10个）
+const textPositionMap = {}
+for (let i = 1; i <= 10; i++) {
+  textPositionMap[i] = { name: `文字广告位${i}`, type: 'info' }
+}
+
+// 获取位置名称
+const getPositionName = (row) => {
+  if (row.type === 'image') {
+    return imagePositionMap[row.sortOrder]?.name || `其他(${row.sortOrder})`
+  } else {
+    return textPositionMap[row.sortOrder]?.name || `其他(${row.sortOrder})`
+  }
+}
+
+// 获取位置标签类型
+const getPositionType = (row) => {
+  if (row.type === 'image') {
+    return imagePositionMap[row.sortOrder]?.type || ''
+  } else {
+    return textPositionMap[row.sortOrder]?.type || ''
+  }
+}
+
+// ============================================================
+// Token 获取 & 认证请求
 // ============================================================
 const getToken = () => {
-  // 1. 从 Cookie 中解析 token
   const cookies = document.cookie.split('; ').reduce((acc, cur) => {
     const [key, val] = cur.split('=')
     acc[key] = decodeURIComponent(val)
     return acc
   }, {})
-  
   let token = cookies.token || ''
-  
-  // 2. 如果 Cookie 中没有，从 localStorage 的 user 对象中解析
   if (!token) {
     try {
       const userStr = localStorage.getItem('user')
@@ -85,17 +152,11 @@ const getToken = () => {
         const user = JSON.parse(userStr)
         token = user.token || ''
       }
-    } catch (e) {
-      console.error('解析 user 对象失败:', e)
-    }
+    } catch (e) {}
   }
-  
   return token
 }
 
-// ============================================================
-// 带认证的 $fetch
-// ============================================================
 const $fetchWithAuth = (url, options = {}) => {
   const token = getToken()
   const headers = {
@@ -117,6 +178,7 @@ const ads = ref([])
 const dialogVisible = ref(false)
 const dialogTitle = ref('')
 const isEdit = ref(false)
+
 const form = reactive({
   id: null,
   title: '',
@@ -124,7 +186,34 @@ const form = reactive({
   linkUrl: '',
   sortOrder: 0,
   status: true,
+  type: 'image',
 })
+
+// 根据当前类型动态生成位置选项
+const currentPositionOptions = computed(() => {
+  if (form.type === 'image') {
+    return [
+      { label: '顶部横幅', value: 0 },
+      { label: '网格1', value: 1 },
+      { label: '网格2', value: 2 },
+      { label: '网格3', value: 3 },
+    ]
+  } else {
+    return Array.from({ length: 10 }, (_, i) => ({
+      label: `文字广告位${i + 1}`,
+      value: i + 1
+    }))
+  }
+})
+
+// 类型切换时自动重置排序值为第一个位置
+const onTypeChange = () => {
+  if (form.type === 'image') {
+    form.sortOrder = 0
+  } else {
+    form.sortOrder = 1
+  }
+}
 
 const fetchAds = async () => {
   try {
@@ -139,7 +228,16 @@ const fetchAds = async () => {
 const openAddDialog = () => {
   isEdit.value = false
   dialogTitle.value = '添加广告'
-  Object.assign(form, { id: null, title: '', imageUrl: '', linkUrl: '', sortOrder: 0, status: true })
+  const defaultSortOrder = form.type === 'image' ? 0 : 1
+  Object.assign(form, {
+    id: null,
+    title: '',
+    imageUrl: '',
+    linkUrl: '',
+    sortOrder: defaultSortOrder,
+    status: true,
+    type: 'image',
+  })
   dialogVisible.value = true
 }
 
@@ -152,16 +250,21 @@ const openEditDialog = (row) => {
 
 const submitForm = async () => {
   try {
+    const payload = { ...form }
+    // 文字广告自动清空图片链接
+    if (payload.type === 'text') {
+      payload.imageUrl = ''
+    }
     if (isEdit.value) {
       await $fetchWithAuth(`/api/admin/ads/${form.id}`, {
         method: 'PUT',
-        body: form
+        body: payload
       })
       ElMessage.success('更新成功')
     } else {
       await $fetchWithAuth('/api/admin/ads', {
         method: 'POST',
-        body: form
+        body: payload
       })
       ElMessage.success('添加成功')
     }

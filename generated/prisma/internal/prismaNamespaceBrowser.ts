@@ -84,7 +84,8 @@ export const ModelName = {
   DailyRedemptionDropClaim: 'DailyRedemptionDropClaim',
   NavigationCategory: 'NavigationCategory',
   NavigationItem: 'NavigationItem',
-  Report: 'Report'
+  Report: 'Report',
+  Ad: 'Ad'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -625,6 +626,21 @@ export const ReportScalarFieldEnum = {
 } as const
 
 export type ReportScalarFieldEnum = (typeof ReportScalarFieldEnum)[keyof typeof ReportScalarFieldEnum]
+
+
+export const AdScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  imageUrl: 'imageUrl',
+  linkUrl: 'linkUrl',
+  sortOrder: 'sortOrder',
+  status: 'status',
+  type: 'type',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type AdScalarFieldEnum = (typeof AdScalarFieldEnum)[keyof typeof AdScalarFieldEnum]
 
 
 export const SortOrder = {

@@ -224,3 +224,8 @@ export type NavigationItem = Prisma.NavigationItemModel
  * 
  */
 export type Report = Prisma.ReportModel
+/**
+ * Model Ad
+ * 
+ */
+export type Ad = Prisma.AdModel

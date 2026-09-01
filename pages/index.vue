@@ -16,18 +16,22 @@ definePageMeta({
 });
 
 // ============================================================
-// 广告位相关（新增）
+// 广告位相关
 // ============================================================
-const ads = ref([]) // 广告列表数据
+const ads = ref([])
 
-// 获取已启用的广告
 const fetchAds = async () => {
   try {
     const res = await $fetch('/api/ads')
     ads.value = res.data || []
   } catch (e) {
-    ads.value = [] // 请求失败时设为空，不影响页面其他功能
+    ads.value = []
   }
+}
+
+// 根据类型和 sortOrder 获取对应的广告
+const getAdByTypeAndSortOrder = (type, sortOrder) => {
+  return ads.value.find(ad => ad.type === type && ad.sortOrder === sortOrder) || null
 }
 
 const searchKeyword = ref("");
@@ -44,39 +48,16 @@ const DEFAULT_HOME_NAVIGATION = [
     name: "搜索工具",
     items: [
       { title: "网盘搜索", path: "/search", icon: "fa-search" },
-    //   { title: "磁力搜索", path: "/magnet", icon: "fa-magnet" },
-    //   { title: "学术搜索", path: "/academic", icon: "fa-graduation-cap" },
     ],
   },
   {
     id: "entertainment",
     name: "娱乐工具",
     items: [
-    //   { title: "音乐下载", path: "/music", icon: "fa-music" },
       { title: "TV直播", path: "/tv", icon: "fa-tv" },
       { title: "AList", path: "/alist", icon: "fa-server" },
-    //   { title: "小说阅读", path: "/novel", icon: "fa-book" },
     ],
   },
-//   {
-//     id: "tools",
-//     name: "实用工具",
-//     items: [
-//       { title: "图片工具", path: "/image-tools", icon: "fa-image" },
-//       { title: "文档转换", path: "/converter", icon: "fa-file-alt" },
-//       { title: "二维码生成", path: "/qrcode", icon: "fa-qrcode" },
-//       { title: "短链生成", path: "/shorturl", icon: "fa-link" },
-//     ],
-//   },
-//   {
-//     id: "learning",
-//     name: "学习工具",
-//     items: [
-//       { title: "英语学习", path: "/english", icon: "fa-language" },
-//       { title: "编程学习", path: "/coding", icon: "fa-code" },
-//       { title: "在线课程", path: "/courses", icon: "fa-chalkboard-teacher" },
-//     ],
-//   },
   {
     id: "others",
     name: "其他",
@@ -90,7 +71,6 @@ const DEFAULT_HOME_NAVIGATION = [
 let deferredDoubanTimer = null;
 let doubanRetryTimer = null;
 
-// 清理函数，防止内存泄漏
 onUnmounted(() => {
   if (stopLocaleWatcher) stopLocaleWatcher();
   if (stopRouteWatcher) stopRouteWatcher();
@@ -99,35 +79,19 @@ onUnmounted(() => {
   window.removeEventListener("scroll", updateBacktopVisibility);
 });
 
-// SEO配置
 useHead({
   title: t('meta.title'),
   meta: [
-    {
-      name: "description",
-      content: t('meta.description'),
-    },
-    {
-      name: "keywords",
-      content: t('meta.keywords'),
-    },
-    // Open Graph / Facebook
+    { name: "description", content: t('meta.description') },
+    { name: "keywords", content: t('meta.keywords') },
     { property: "og:type", content: "website" },
     { property: "og:title", content: t('meta.title') },
-    {
-      property: "og:description",
-      content: t('meta.description'),
-    },
+    { property: "og:description", content: t('meta.description') },
     { property: "og:image", content: "https://www.aipan.me/default-og-image.png" },
-    // Twitter
     { name: "twitter:card", content: "summary_large_image" },
     { name: "twitter:title", content: t('meta.title') },
-    {
-      name: "twitter:description",
-      content: t('meta.description'),
-    },
+    { name: "twitter:description", content: t('meta.description') },
     { name: "twitter:image", content: "https://www.aipan.me/default-og-image.png" },
-    // 其他重要的meta标签
     { name: "robots", content: "index,follow" },
     { name: "author", content: "MISO" },
     { name: "viewport", content: "width=device-width, initial-scale=1" },
@@ -164,9 +128,8 @@ useHead({
   ]
 });
 
-// 使用activeCategoryCookie作为唯一存储方式
 const activeCategoryCookie = useCookie("activeCategory", {
-  maxAge: 60 * 60 * 24 * 7, // 保存7天
+  maxAge: 60 * 60 * 24 * 7,
 });
 
 const debouncedSearch = useDebounceFn(async (keyword) => {
@@ -222,7 +185,6 @@ const cleanupDeferredDoubanSchedule = () => {
     window.clearTimeout(deferredDoubanTimer);
     deferredDoubanTimer = null;
   }
-
   DEFERRED_DOUBAN_INTERACTION_EVENTS.forEach((eventName) => {
     window.removeEventListener(eventName, loadDeferredDoubanData);
   });
@@ -239,7 +201,6 @@ const scheduleDoubanRetry = () => {
   if (doubanRetryTimer || hasDoubanData()) {
     return;
   }
-
   const elapsed = Date.now() - doubanState.value.lastAttemptAt;
   const retryDelay = Math.max(0, DOUBAN_RETRY_DELAY - elapsed);
   doubanRetryTimer = window.setTimeout(() => {
@@ -250,26 +211,17 @@ const scheduleDoubanRetry = () => {
 
 const loadDeferredDoubanData = async ({ force = false, silent = false } = {}) => {
   cleanupDeferredDoubanSchedule();
-
-  if (doubanLoading.value) {
-    return;
-  }
-
-  if (!force && isDoubanCacheFresh()) {
-    return;
-  }
-
+  if (doubanLoading.value) return;
+  if (!force && isDoubanCacheFresh()) return;
   if (!force && doubanLoaded.value && !canAttemptDoubanLoad()) {
     scheduleDoubanRetry();
     return;
   }
-
   patchDoubanState({
     loading: true,
     lastAttemptAt: Date.now(),
     loaded: silent || hasDoubanData() ? doubanState.value.loaded : false,
   });
-
   try {
     const res = await $fetch('/api/douban/new');
     const normalizedData = normalizeDoubanHomepageData(res?.data);
@@ -304,29 +256,23 @@ const loadDeferredDoubanData = async ({ force = false, silent = false } = {}) =>
 };
 
 const scheduleDeferredDoubanLoad = () => {
-  if (isDoubanCacheFresh()) {
-    return;
-  }
-
+  if (isDoubanCacheFresh()) return;
   if (hasDoubanData()) {
     if (canAttemptDoubanLoad()) {
       void loadDeferredDoubanData({ force: true, silent: true });
     }
     return;
   }
-
   if (doubanLoaded.value && !canAttemptDoubanLoad()) {
     scheduleDoubanRetry();
     return;
   }
-
   DEFERRED_DOUBAN_INTERACTION_EVENTS.forEach((eventName) => {
     window.addEventListener(eventName, loadDeferredDoubanData, { once: true, passive: true });
   });
   deferredDoubanTimer = window.setTimeout(loadDeferredDoubanData, DEFERRED_DOUBAN_FALLBACK_DELAY);
 };
 
-// 添加防抖处理，避免重复点击
 const goDouban = useDebounceFn((movie) => {
   if (!movie || !movie.title) {
     console.warn('Invalid movie data:', movie);
@@ -346,7 +292,6 @@ const scrollToTop = () => {
   window.scrollTo({ top: 0, behavior: "smooth" });
 };
 
-// 导航数据
 const categories = ref(DEFAULT_HOME_NAVIGATION);
 const activeCategory = ref(activeCategoryCookie.value || DEFAULT_HOME_NAVIGATION[0]?.id || "");
 
@@ -361,7 +306,6 @@ const ensureActiveCategory = () => {
   }
 };
 
-// 加载导航数据
 const loadNavigationData = async () => {
   try {
     const { data } = await $fetch('/api/navigation');
@@ -374,37 +318,27 @@ const loadNavigationData = async () => {
   }
 };
 
-// 确保在页面挂载前先使用本地导航，接口返回后再同步后台配置
 onBeforeMount(() => {
   ensureActiveCategory();
   void loadNavigationData();
 });
 
-// 监听activeCategory变化，只保存到cookie
 watch(activeCategory, (newValue) => {
   activeCategoryCookie.value = newValue;
 });
 
-// 监听语言变化，重新加载导航数据
 const stopLocaleWatcher = watch(locale, async () => {
   await loadNavigationData();
   ensureActiveCategory();
 });
 
 onMounted(() => {
-  // 在页面加载完成后，将滚动位置重置到顶部
   window.scrollTo(0, 0);
-
   window.addEventListener("scroll", updateBacktopVisibility, { passive: true });
   scheduleDeferredDoubanLoad();
-
-  // ============================================================
-  // 加载广告数据（新增）
-  // ============================================================
-  fetchAds()
+  fetchAds();
 });
 
-// 监听路由变化（使用节流优化性能）
 const throttledScrollToTop = useDebounceFn(() => {
   window.scrollTo(0, 0);
 }, 100);
@@ -412,7 +346,6 @@ const throttledScrollToTop = useDebounceFn(() => {
 const stopRouteWatcher = watch(
   () => router.currentRoute.value,
   () => {
-    // 当路由发生变化时，将滚动位置重置到顶部
     throttledScrollToTop();
   }
 );
@@ -448,9 +381,7 @@ const stopRouteWatcher = watch(
         </div>
       </div>
 
-      <!-- ============================================================
-           搜索框区域
-           ============================================================ -->
+      <!-- 搜索框 -->
       <div class="max-w-[1240px] mx-auto mt-[20px] md:mt-[30px] px-4 md:px-0">
         <div class="w-full md:w-[700px] mx-auto">
           <div class="relative group">
@@ -479,37 +410,9 @@ const stopRouteWatcher = watch(
         </div>
       </div>
 
-      <!-- ============================================================
-           广告位区域（新增）
-           位置：搜索框下方，导航分类标签上方
-           当有广告数据时显示，无广告时隐藏
-           ============================================================ -->
-      <div v-if="ads.length" class="max-w-[1240px] mx-auto mt-6 px-4">
-        <!-- 响应式网格：手机1列，平板2列，电脑3列 -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          <!-- 遍历广告列表，每个广告渲染为一个卡片 -->
-          <div
-            v-for="ad in ads"
-            :key="ad.id"
-            class="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-xl shadow-sm hover:shadow-md transition-shadow duration-300 p-3 text-center border border-gray-100 dark:border-gray-700"
-          >
-            <!-- 广告标识（小字，符合广告法要求） -->
-            <p class="text-[10px] text-gray-400 dark:text-gray-500 mb-1">广告</p>
-            <!-- 广告链接：新窗口打开，rel="nofollow" 不传递SEO权重 -->
-            <a :href="ad.linkUrl" target="_blank" rel="nofollow">
-              <!-- 广告图片：懒加载，自适应宽度 -->
-              <img :src="ad.imageUrl" :alt="ad.title" class="w-full rounded-lg" loading="lazy">
-            </a>
-          </div>
-        </div>
-      </div>
-
-      <!-- ============================================================
-           导航分类区域
-           ============================================================ -->
+      <!-- 导航分类区域 -->
       <div class="max-w-[1240px] mx-auto mt-4 px-4 min-h-[176px] md:min-h-[112px]">
         <template v-if="categories.length > 0">
-          <!-- 导航分类标签 -->
           <div class="flex items-center justify-center gap-2 mb-4 overflow-x-auto pb-2 scrollbar-hide">
             <button v-for="category in categories" :key="category.id"
               class="px-3 py-1 rounded-full text-xs font-medium transition-all duration-300 whitespace-nowrap" :class="[
@@ -521,7 +424,6 @@ const stopRouteWatcher = watch(
             </button>
           </div>
 
-          <!-- 导航网格 -->
           <div class="flex items-center justify-center flex-wrap gap-2">
             <template v-for="category in categories" :key="category.id">
               <template v-if="activeCategory === category.id">
@@ -544,16 +446,83 @@ const stopRouteWatcher = watch(
       </div>
 
       <!-- ============================================================
-           豆瓣热映区域
+           广告位区域（固定高度，object-contain 完整显示）
            ============================================================ -->
+      <div class="max-w-[1240px] mx-auto mt-4 px-4 space-y-3">
+        <!-- 1. 图片广告区域 -->
+        <!-- 顶部横幅（sortOrder === 0）固定高度 150px -->
+        <div class="w-full h-[150px]">
+          <template v-if="getAdByTypeAndSortOrder('image', 0)">
+            <a :href="getAdByTypeAndSortOrder('image', 0).linkUrl" target="_blank" rel="nofollow" class="block w-full h-full">
+              <img 
+                :src="getAdByTypeAndSortOrder('image', 0).imageUrl" 
+                :alt="getAdByTypeAndSortOrder('image', 0).title" 
+                class="w-full h-full object-contain rounded-xl" 
+                loading="lazy"
+              >
+            </a>
+          </template>
+          <template v-else>
+            <div class="w-full h-full flex flex-col items-center justify-center bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 rounded-xl border-2 border-dashed border-blue-300 dark:border-blue-700">
+              <i class="fas fa-ad text-3xl text-blue-400 dark:text-blue-500 mb-2"></i>
+              <span class="text-base font-bold text-gray-700 dark:text-gray-300">顶部横幅广告位</span>
+              <span class="text-xs text-gray-500 dark:text-gray-400">点击了解投放详情</span>
+            </div>
+          </template>
+        </div>
+
+        <!-- 图片网格广告（sortOrder === 1, 2, 3）固定高度 120px -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+          <div v-for="order in [1, 2, 3]" :key="order" class="w-full h-[120px]">
+            <template v-if="getAdByTypeAndSortOrder('image', order)">
+              <div class="w-full h-full bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-xl shadow-sm hover:shadow-md transition-shadow duration-300 border border-gray-100 dark:border-gray-700 overflow-hidden">
+                <p class="text-[10px] text-gray-400 dark:text-gray-500 text-center pt-1">广告</p>
+                <a :href="getAdByTypeAndSortOrder('image', order).linkUrl" target="_blank" rel="nofollow" class="block w-full h-[calc(100%-20px)]">
+                  <img 
+                    :src="getAdByTypeAndSortOrder('image', order).imageUrl" 
+                    :alt="getAdByTypeAndSortOrder('image', order).title" 
+                    class="w-full h-full object-contain rounded-lg" 
+                    loading="lazy"
+                  >
+                </a>
+              </div>
+            </template>
+            <template v-else>
+              <div class="w-full h-full flex flex-col items-center justify-center bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-xl border-2 border-dashed border-gray-300 dark:border-gray-600 hover:shadow-lg transition-all duration-300 cursor-pointer group hover:border-blue-400 dark:hover:border-blue-500">
+                <i class="fas fa-image text-2xl text-gray-400 dark:text-gray-500 mb-1 group-hover:scale-110 transition-transform"></i>
+                <span class="text-sm font-medium text-gray-600 dark:text-gray-400">广告位招租</span>
+                <span class="text-xs text-gray-400 dark:text-gray-500">点此投放</span>
+              </div>
+            </template>
+          </div>
+        </div>
+
+        <!-- 2. 文字广告区域（10个，sortOrder 1~10） -->
+        <div class="mt-4">
+          <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2">
+            <div v-for="i in 10" :key="i" class="min-h-[56px] bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-lg border border-gray-200 dark:border-gray-700 p-2 text-center hover:shadow-md transition-all duration-300 cursor-pointer group hover:border-blue-400 dark:hover:border-blue-500 flex items-center justify-center overflow-hidden">
+              <template v-if="getAdByTypeAndSortOrder('text', i)">
+                <a :href="getAdByTypeAndSortOrder('text', i).linkUrl" target="_blank" rel="nofollow" class="block w-full">
+                  <span class="text-xs text-gray-600 dark:text-gray-400 group-hover:text-blue-500 dark:group-hover:text-blue-400 transition-colors line-clamp-2">
+                    {{ getAdByTypeAndSortOrder('text', i).title }}
+                  </span>
+                </a>
+              </template>
+              <template v-else>
+                <span class="text-xs text-gray-600 dark:text-gray-400 group-hover:text-blue-500 dark:group-hover:text-blue-400 transition-colors">广告位招租</span>
+              </template>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 豆瓣热映 -->
       <DoubanImageBox
         v-if="doubanData.length > 0"
         :doubanData="doubanData"
         @goDouban="goDouban"></DoubanImageBox>
 
-      <!-- ============================================================
-           返回顶部按钮
-           ============================================================ -->
+      <!-- 返回顶部 -->
       <button
         v-show="showBacktop"
         type="button"
@@ -587,7 +556,6 @@ const stopRouteWatcher = watch(
     opacity: 0;
     transform: translateY(-20px);
   }
-
   to {
     opacity: 1;
     transform: translateY(0);
@@ -651,9 +619,7 @@ const stopRouteWatcher = watch(
     opacity: 0.7;
     transform: scale(1);
   }
-
-  70%,
-  100% {
+  70%, 100% {
     opacity: 0;
     transform: scale(1.35);
   }
@@ -663,7 +629,6 @@ const stopRouteWatcher = watch(
   --search-pulse-color: rgba(96, 165, 250, 0.4);
 }
 
-/* 当输入框获得焦点时，停止按钮动画 */
 .el-input__wrapper.is-focus~.search-btn::after,
 input:focus+.search-btn::after {
   animation: none;
@@ -677,7 +642,6 @@ input:focus+.search-btn::after {
   }
 }
 
-/* 图片渐进加载动画 */
 .fade-enter-active,
 .fade-leave-active {
   transition: opacity 0.5s ease;
