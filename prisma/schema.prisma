@@ -725,19 +725,22 @@ model Report {
   @@index([createdAt])
   @@index([reporterIp])
 }
+
 // ============================================================
-// 广告位模型
+// 广告位模型（已添加 imageWidth 和 imageHeight）
 // ============================================================
 model Ad {
-  id         Int      @id @default(autoincrement())
-  title      String   @db.Text
-  imageUrl   String   @map("image_url") @db.Text
-  linkUrl    String   @map("link_url") @db.Text
-  sortOrder  Int      @default(0) @map("sort_order")
-  status     Boolean  @default(true)
-  type       String   @default("image") // "image" 或 "text"
-  createdAt  DateTime @default(now()) @map("created_at")
-  updatedAt  DateTime @updatedAt @map("updated_at")
+  id           Int      @id @default(autoincrement())
+  title        String   @db.Text
+  imageUrl     String   @map("image_url") @db.Text
+  linkUrl      String   @map("link_url") @db.Text
+  sortOrder    Int      @default(0) @map("sort_order")
+  status       Boolean  @default(true)
+  type         String   @default("image") // "image" 或 "text"
+  imageWidth   Int?     @map("image_width")   // 新增：图片宽度（像素）
+  imageHeight  Int?     @map("image_height")  // 新增：图片高度（像素）
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
 
   @@map("ads")
   @@index([type])
