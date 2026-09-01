@@ -65,14 +65,36 @@ import { ref, onMounted, reactive } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 
 // ============================================================
-// 获取 Token
+// 获取 Token（从 Cookie 或 localStorage）
 // ============================================================
 const getToken = () => {
-  return localStorage.getItem('token') || sessionStorage.getItem('token') || ''
+  // 1. 从 Cookie 中解析 token
+  const cookies = document.cookie.split('; ').reduce((acc, cur) => {
+    const [key, val] = cur.split('=')
+    acc[key] = decodeURIComponent(val)
+    return acc
+  }, {})
+  
+  let token = cookies.token || ''
+  
+  // 2. 如果 Cookie 中没有，从 localStorage 的 user 对象中解析
+  if (!token) {
+    try {
+      const userStr = localStorage.getItem('user')
+      if (userStr) {
+        const user = JSON.parse(userStr)
+        token = user.token || ''
+      }
+    } catch (e) {
+      console.error('解析 user 对象失败:', e)
+    }
+  }
+  
+  return token
 }
 
 // ============================================================
-// 带认证的 $fetch 封装
+// 带认证的 $fetch
 // ============================================================
 const $fetchWithAuth = (url, options = {}) => {
   const token = getToken()
