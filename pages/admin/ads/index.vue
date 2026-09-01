@@ -64,6 +64,16 @@
 import { ref, onMounted, reactive } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 
+// ============================================================
+// 封装带凭证的 $fetch 工具函数
+// ============================================================
+const $fetchWithAuth = (url, options = {}) => {
+  return $fetch(url, {
+    ...options,
+    credentials: 'include'   // 关键：携带会话 Cookie
+  })
+}
+
 const ads = ref([])
 const dialogVisible = ref(false)
 const dialogTitle = ref('')
@@ -78,8 +88,13 @@ const form = reactive({
 })
 
 const fetchAds = async () => {
-  const res = await $fetch('/api/admin/ads')
-  ads.value = res.data
+  try {
+    const res = await $fetchWithAuth('/api/admin/ads')
+    ads.value = res.data
+  } catch (err) {
+    console.error('获取广告列表失败:', err)
+    ElMessage.error('获取广告列表失败，请刷新重试')
+  }
 }
 
 const openAddDialog = () => {
@@ -97,28 +112,53 @@ const openEditDialog = (row) => {
 }
 
 const submitForm = async () => {
-  if (isEdit.value) {
-    await $fetch(`/api/admin/ads/${form.id}`, { method: 'PUT', body: form })
-    ElMessage.success('更新成功')
-  } else {
-    await $fetch('/api/admin/ads', { method: 'POST', body: form })
-    ElMessage.success('添加成功')
+  try {
+    if (isEdit.value) {
+      await $fetchWithAuth(`/api/admin/ads/${form.id}`, {
+        method: 'PUT',
+        body: form
+      })
+      ElMessage.success('更新成功')
+    } else {
+      await $fetchWithAuth('/api/admin/ads', {
+        method: 'POST',
+        body: form
+      })
+      ElMessage.success('添加成功')
+    }
+    dialogVisible.value = false
+    await fetchAds()
+  } catch (err) {
+    console.error('提交广告失败:', err)
+    ElMessage.error('操作失败，请稍后重试')
   }
-  dialogVisible.value = false
-  await fetchAds()
 }
 
 const toggleStatus = async (row) => {
-  await $fetch(`/api/admin/ads/${row.id}/toggle`, { method: 'POST' })
-  ElMessage.success(`已${row.status ? '下架' : '上架'}`)
-  await fetchAds()
+  try {
+    await $fetchWithAuth(`/api/admin/ads/${row.id}/toggle`, {
+      method: 'POST'
+    })
+    ElMessage.success(`已${row.status ? '下架' : '上架'}`)
+    await fetchAds()
+  } catch (err) {
+    ElMessage.error('切换状态失败，请重试')
+  }
 }
 
 const handleDelete = async (row) => {
-  await ElMessageBox.confirm('确认删除此广告？', '提示', { type: 'warning' })
-  await $fetch(`/api/admin/ads/${row.id}`, { method: 'DELETE' })
-  ElMessage.success('删除成功')
-  await fetchAds()
+  try {
+    await ElMessageBox.confirm('确认删除此广告？', '提示', { type: 'warning' })
+    await $fetchWithAuth(`/api/admin/ads/${row.id}`, {
+      method: 'DELETE'
+    })
+    ElMessage.success('删除成功')
+    await fetchAds()
+  } catch (err) {
+    if (err !== 'cancel') {
+      ElMessage.error('删除失败，请重试')
+    }
+  }
 }
 
 onMounted(fetchAds)
