@@ -220,7 +220,8 @@ const menuGroups = [
       { title: '每日抢兑', path: '/admin/points/daily-redemption-drop', icon: 'fas fa-bolt' },
       { title: '导航管理', path: '/admin/navigation', icon: 'fas fa-bars' },
       { title: '搜索统计', path: '/admin/search-stats', icon: 'fas fa-chart-line' },
-      { title: '系统配置', path: '/admin/settings', icon: 'fas fa-cog' }
+      { title: '系统配置', path: '/admin/settings', icon: 'fas fa-cog' }，
+       { title: '广告管理', path: '/admin/ads', icon: 'fas fa-ad' }
     ]
   }
 ];

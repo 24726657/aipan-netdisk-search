@@ -725,3 +725,34 @@ model Report {
   @@index([createdAt])
   @@index([reporterIp])
 }
+// ============================================================
+// 广告位模型
+// ============================================================
+model Ad {
+  // 自增主键ID
+  id         Int      @id @default(autoincrement())
+  
+  // 广告标题（用于后台识别，不直接展示给用户）
+  title      String   @db.Text
+  
+  // 广告图片URL（绝对路径或完整URL，如 /ad1.jpg 或 https://example.com/ad.jpg）
+  imageUrl   String   @map("image_url") @db.Text
+  
+  // 广告点击跳转链接
+  linkUrl    String   @map("link_url") @db.Text
+  
+  // 排序权重（数字越小越靠前）
+  sortOrder  Int      @default(0) @map("sort_order")
+  
+  // 状态：true=启用（前端显示），false=禁用（前端隐藏）
+  status     Boolean  @default(true)
+  
+  // 创建时间（自动生成）
+  createdAt  DateTime @default(now()) @map("created_at")
+  
+  // 更新时间（自动更新）
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  // 映射到数据库表名 'ads'
+  @@map("ads")
+}

@@ -14,6 +14,22 @@ const DoubanImageBox = defineAsyncComponent(
 definePageMeta({
   layout: "netdisk",
 });
+
+// ============================================================
+// 广告位相关（新增）
+// ============================================================
+const ads = ref([]) // 广告列表数据
+
+// 获取已启用的广告
+const fetchAds = async () => {
+  try {
+    const res = await $fetch('/api/ads')
+    ads.value = res.data || []
+  } catch (e) {
+    ads.value = [] // 请求失败时设为空，不影响页面其他功能
+  }
+}
+
 const searchKeyword = ref("");
 const router = useRouter();
 const { locale, locales, setLocale, t } = useI18n();
@@ -147,8 +163,6 @@ useHead({
     }
   ]
 });
-
-
 
 // 使用activeCategoryCookie作为唯一存储方式
 const activeCategoryCookie = useCookie("activeCategory", {
@@ -383,6 +397,11 @@ onMounted(() => {
 
   window.addEventListener("scroll", updateBacktopVisibility, { passive: true });
   scheduleDeferredDoubanLoad();
+
+  // ============================================================
+  // 加载广告数据（新增）
+  // ============================================================
+  fetchAds()
 });
 
 // 监听路由变化（使用节流优化性能）
@@ -397,6 +416,7 @@ const stopRouteWatcher = watch(
     throttledScrollToTop();
   }
 );
+
 </script>
 
 <template>
@@ -427,6 +447,10 @@ const stopRouteWatcher = watch(
           </div>
         </div>
       </div>
+
+      <!-- ============================================================
+           搜索框区域
+           ============================================================ -->
       <div class="max-w-[1240px] mx-auto mt-[20px] md:mt-[30px] px-4 md:px-0">
         <div class="w-full md:w-[700px] mx-auto">
           <div class="relative group">
@@ -455,8 +479,36 @@ const stopRouteWatcher = watch(
         </div>
       </div>
 
-        <div class="max-w-[1240px] mx-auto mt-4 px-4 min-h-[176px] md:min-h-[112px]">
-          <template v-if="categories.length > 0">
+      <!-- ============================================================
+           广告位区域（新增）
+           位置：搜索框下方，导航分类标签上方
+           当有广告数据时显示，无广告时隐藏
+           ============================================================ -->
+      <div v-if="ads.length" class="max-w-[1240px] mx-auto mt-6 px-4">
+        <!-- 响应式网格：手机1列，平板2列，电脑3列 -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <!-- 遍历广告列表，每个广告渲染为一个卡片 -->
+          <div
+            v-for="ad in ads"
+            :key="ad.id"
+            class="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-xl shadow-sm hover:shadow-md transition-shadow duration-300 p-3 text-center border border-gray-100 dark:border-gray-700"
+          >
+            <!-- 广告标识（小字，符合广告法要求） -->
+            <p class="text-[10px] text-gray-400 dark:text-gray-500 mb-1">广告</p>
+            <!-- 广告链接：新窗口打开，rel="nofollow" 不传递SEO权重 -->
+            <a :href="ad.linkUrl" target="_blank" rel="nofollow">
+              <!-- 广告图片：懒加载，自适应宽度 -->
+              <img :src="ad.imageUrl" :alt="ad.title" class="w-full rounded-lg" loading="lazy">
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============================================================
+           导航分类区域
+           ============================================================ -->
+      <div class="max-w-[1240px] mx-auto mt-4 px-4 min-h-[176px] md:min-h-[112px]">
+        <template v-if="categories.length > 0">
           <!-- 导航分类标签 -->
           <div class="flex items-center justify-center gap-2 mb-4 overflow-x-auto pb-2 scrollbar-hide">
             <button v-for="category in categories" :key="category.id"
@@ -483,18 +535,25 @@ const stopRouteWatcher = watch(
                       class="text-gray-800 dark:text-gray-200 text-xs font-medium truncate group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-300">
                       {{ item.title }}
                     </h3>
-                     
                   </div>
                 </nuxt-link>
               </template>
             </template>
           </div>
-          </template>
-        </div>
+        </template>
+      </div>
+
+      <!-- ============================================================
+           豆瓣热映区域
+           ============================================================ -->
       <DoubanImageBox
         v-if="doubanData.length > 0"
         :doubanData="doubanData"
         @goDouban="goDouban"></DoubanImageBox>
+
+      <!-- ============================================================
+           返回顶部按钮
+           ============================================================ -->
       <button
         v-show="showBacktop"
         type="button"
@@ -534,8 +593,6 @@ const stopRouteWatcher = watch(
     transform: translateY(0);
   }
 }
-
-
 
 :deep(.el-input__wrapper.is-focus) {
   --el-input-focus-border-color: #3b82f6;
