@@ -65,15 +65,32 @@ import { ref, onMounted, reactive } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 
 // ============================================================
-// 封装带凭证的 $fetch 工具函数
+// 获取 Token
+// ============================================================
+const getToken = () => {
+  return localStorage.getItem('token') || sessionStorage.getItem('token') || ''
+}
+
+// ============================================================
+// 带认证的 $fetch 封装
 // ============================================================
 const $fetchWithAuth = (url, options = {}) => {
+  const token = getToken()
+  const headers = {
+    ...options.headers,
+    'Content-Type': 'application/json',
+    ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+  }
   return $fetch(url, {
     ...options,
-    credentials: 'include'   // 关键：携带会话 Cookie
+    headers,
+    credentials: 'include'
   })
 }
 
+// ============================================================
+// 组件逻辑
+// ============================================================
 const ads = ref([])
 const dialogVisible = ref(false)
 const dialogTitle = ref('')
