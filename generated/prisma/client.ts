@@ -229,3 +229,8 @@ export type Report = Prisma.ReportModel
  * 
  */
 export type Ad = Prisma.AdModel
+/**
+ * Model FriendlyLink
+ * 
+ */
+export type FriendlyLink = Prisma.FriendlyLinkModel

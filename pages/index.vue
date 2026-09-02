@@ -482,10 +482,13 @@ const stopRouteWatcher = watch(
               />
             </a>
           </template>
-          <!-- 无广告时：更醒目的占位 + 虚线边框 -->
+          <!-- 无广告时：点击跳转到广告投放页面 -->
           <template v-else>
-            <div class="w-full h-full flex flex-col items-center justify-center border-2 border-dashed border-blue-400 dark:border-blue-500 bg-white/60 dark:bg-gray-800/60 rounded-xl">
-              <i class="fas fa-ad text-4xl text-blue-500 dark:text-blue-400 mb-2"></i>
+            <div
+              @click="navigateTo('/advertise')"
+              class="w-full h-full flex flex-col items-center justify-center border-2 border-dashed border-blue-400 dark:border-blue-500 bg-white/60 dark:bg-gray-800/60 rounded-xl cursor-pointer hover:bg-blue-50/80 dark:hover:bg-blue-900/20 transition-all duration-300 group"
+            >
+              <i class="fas fa-ad text-4xl text-blue-500 dark:text-blue-400 mb-2 group-hover:scale-110 transition-transform"></i>
               <span class="text-lg font-bold text-gray-800 dark:text-gray-200">顶部横幅广告位</span>
               <span class="text-sm text-blue-600 dark:text-blue-400 font-medium">🔥 火爆招租中，点击了解投放详情</span>
             </div>
@@ -508,11 +511,15 @@ const stopRouteWatcher = watch(
                 </a>
               </div>
             </template>
+            <!-- 无广告时：点击跳转到广告投放页面 -->
             <template v-else>
-              <div class="w-full h-full flex flex-col items-center justify-center border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-xl">
-                <i class="fas fa-image text-2xl text-gray-400 dark:text-gray-500 mb-1"></i>
+              <div
+                @click="navigateTo('/advertise')"
+                class="w-full h-full flex flex-col items-center justify-center border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-xl cursor-pointer hover:border-blue-400 dark:hover:border-blue-500 hover:bg-blue-50/30 dark:hover:bg-blue-900/10 transition-all duration-300 group"
+              >
+                <i class="fas fa-image text-2xl text-gray-400 dark:text-gray-500 mb-1 group-hover:scale-110 transition-transform"></i>
                 <span class="text-sm font-medium text-gray-600 dark:text-gray-400">广告位招租</span>
-                <span class="text-xs text-gray-400 dark:text-gray-500">7:2 比例</span>
+                <span class="text-xs text-gray-400 dark:text-gray-500">点击投放</span>
               </div>
             </template>
           </div>
@@ -521,11 +528,11 @@ const stopRouteWatcher = watch(
         <!-- 3. 文字广告（10个，每个不同彩色） -->
         <div class="mt-4">
           <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2">
-            <div v-for="i in 10" :key="i" 
+            <div v-for="i in 10" :key="i"
                  class="min-h-[56px] bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-lg border border-gray-200 dark:border-gray-700 p-2 text-center hover:shadow-md transition-all duration-300 cursor-pointer group hover:border-blue-400 dark:hover:border-blue-500 flex items-center justify-center overflow-hidden">
               <template v-if="getAdByTypeAndSortOrder('text', i)">
                 <a :href="getAdByTypeAndSortOrder('text', i).linkUrl" target="_blank" rel="nofollow" class="block w-full">
-                  <span 
+                  <span
                     class="text-xs font-semibold transition-colors line-clamp-2"
                     :style="{ color: getTextAdColor(i) }"
                   >
@@ -533,9 +540,11 @@ const stopRouteWatcher = watch(
                   </span>
                 </a>
               </template>
+              <!-- 无广告时：点击跳转到广告投放页面 -->
               <template v-else>
-                <span 
-                  class="text-xs font-semibold transition-colors"
+                <span
+                  @click="navigateTo('/advertise')"
+                  class="text-xs font-semibold transition-colors cursor-pointer hover:scale-105"
                   :style="{ color: getTextAdColor(i) }"
                 >
                   广告位招租

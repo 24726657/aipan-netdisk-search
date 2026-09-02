@@ -426,7 +426,8 @@ export const ModelName = {
   NavigationCategory: 'NavigationCategory',
   NavigationItem: 'NavigationItem',
   Report: 'Report',
-  Ad: 'Ad'
+  Ad: 'Ad',
+  FriendlyLink: 'FriendlyLink'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -442,7 +443,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "resourceType" | "resource" | "post" | "postCategory" | "postToCategory" | "alist" | "comment" | "blogCategory" | "blogPostToCategory" | "blogPost" | "userResource" | "systemSettings" | "searchRecord" | "dailySearchStats" | "userVodConfig" | "tvboxSource" | "emailVerificationToken" | "notification" | "chatRoom" | "chatRoomUser" | "chatMessage" | "checkIn" | "pointsHistory" | "transferPointGrant" | "pointTask" | "pointTaskCompletion" | "registrationGiftGrant" | "redemptionCodeCampaign" | "redemptionCode" | "redemptionCodeRedemption" | "dailyRedemptionDrop" | "dailyRedemptionDropClaim" | "navigationCategory" | "navigationItem" | "report" | "ad"
+    modelProps: "user" | "resourceType" | "resource" | "post" | "postCategory" | "postToCategory" | "alist" | "comment" | "blogCategory" | "blogPostToCategory" | "blogPost" | "userResource" | "systemSettings" | "searchRecord" | "dailySearchStats" | "userVodConfig" | "tvboxSource" | "emailVerificationToken" | "notification" | "chatRoom" | "chatRoomUser" | "chatMessage" | "checkIn" | "pointsHistory" | "transferPointGrant" | "pointTask" | "pointTaskCompletion" | "registrationGiftGrant" | "redemptionCodeCampaign" | "redemptionCode" | "redemptionCodeRedemption" | "dailyRedemptionDrop" | "dailyRedemptionDropClaim" | "navigationCategory" | "navigationItem" | "report" | "ad" | "friendlyLink"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -3184,6 +3185,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    FriendlyLink: {
+      payload: Prisma.$FriendlyLinkPayload<ExtArgs>
+      fields: Prisma.FriendlyLinkFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.FriendlyLinkFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FriendlyLinkPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.FriendlyLinkFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FriendlyLinkPayload>
+        }
+        findFirst: {
+          args: Prisma.FriendlyLinkFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FriendlyLinkPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.FriendlyLinkFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FriendlyLinkPayload>
+        }
+        findMany: {
+          args: Prisma.FriendlyLinkFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FriendlyLinkPayload>[]
+        }
+        create: {
+          args: Prisma.FriendlyLinkCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FriendlyLinkPayload>
+        }
+        createMany: {
+          args: Prisma.FriendlyLinkCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.FriendlyLinkCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FriendlyLinkPayload>[]
+        }
+        delete: {
+          args: Prisma.FriendlyLinkDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FriendlyLinkPayload>
+        }
+        update: {
+          args: Prisma.FriendlyLinkUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FriendlyLinkPayload>
+        }
+        deleteMany: {
+          args: Prisma.FriendlyLinkDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.FriendlyLinkUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.FriendlyLinkUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FriendlyLinkPayload>[]
+        }
+        upsert: {
+          args: Prisma.FriendlyLinkUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FriendlyLinkPayload>
+        }
+        aggregate: {
+          args: Prisma.FriendlyLinkAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateFriendlyLink>
+        }
+        groupBy: {
+          args: Prisma.FriendlyLinkGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.FriendlyLinkGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.FriendlyLinkCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.FriendlyLinkCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -3766,6 +3841,23 @@ export const AdScalarFieldEnum = {
 export type AdScalarFieldEnum = (typeof AdScalarFieldEnum)[keyof typeof AdScalarFieldEnum]
 
 
+export const FriendlyLinkScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  url: 'url',
+  logo: 'logo',
+  description: 'description',
+  sortOrder: 'sortOrder',
+  status: 'status',
+  target: 'target',
+  rel: 'rel',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type FriendlyLinkScalarFieldEnum = (typeof FriendlyLinkScalarFieldEnum)[keyof typeof FriendlyLinkScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -4012,6 +4104,7 @@ export type GlobalOmitConfig = {
   navigationItem?: Prisma.NavigationItemOmit
   report?: Prisma.ReportOmit
   ad?: Prisma.AdOmit
+  friendlyLink?: Prisma.FriendlyLinkOmit
 }
 
 /* Types for Logging */

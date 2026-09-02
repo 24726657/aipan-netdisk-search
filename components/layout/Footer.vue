@@ -11,10 +11,42 @@ const footerLinks = [
   { name: 'footer.links.copyright', path: '/copyright' },
   { name: 'footer.links.releases', path: '/releases' },
 ];
+
+// 友情链接数据
+const links = ref([]);
+const fetchLinks = async () => {
+  try {
+    const res = await $fetch('/api/links');
+    links.value = res.data || [];
+  } catch (e) {
+    links.value = [];
+  }
+};
+
+onMounted(() => {
+  fetchLinks();
+});
 </script>
 
 <template>
   <footer class="bg-white-100 dark:bg-slate-900 dark:text-white py-6 space-y-2">
+    <!-- 友情链接区域 -->
+    <div v-if="links.length > 0" class="max-w-[1240px] mx-auto px-4 pb-4 mb-2 border-b border-gray-200 dark:border-gray-700">
+      <div class="flex flex-wrap items-center justify-center gap-1 text-xs">
+        <span class="text-gray-500 dark:text-gray-400 font-medium mr-1">友情链接：</span>
+        <template v-for="(link, index) in links" :key="link.id">
+          <a
+            :href="link.url"
+            :target="link.target || '_blank'"
+            rel="noopener noreferrer"
+            class="text-gray-600 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-400 transition-colors"
+          >
+            {{ link.name }}
+          </a>
+          <span v-if="index < links.length - 1" class="text-gray-300 dark:text-gray-600">|</span>
+        </template>
+      </div>
+    </div>
 
     <!-- 版权信息 -->
     <p class="text-center text-xs sm:text-sm">

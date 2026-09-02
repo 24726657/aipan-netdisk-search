@@ -221,7 +221,8 @@ const menuGroups = [
       { title: '导航管理', path: '/admin/navigation', icon: 'fas fa-bars' },
       { title: '搜索统计', path: '/admin/search-stats', icon: 'fas fa-chart-line' },
       { title: '系统配置', path: '/admin/settings', icon: 'fas fa-cog' },
-       { title: '广告管理', path: '/admin/ads', icon: 'fas fa-ad' }
+      { title: '广告管理', path: '/admin/ads', icon: 'fas fa-ad' },
+      { title: '友情链接', path: '/admin/links', icon: 'fas fa-link' }
     ]
   }
 ];

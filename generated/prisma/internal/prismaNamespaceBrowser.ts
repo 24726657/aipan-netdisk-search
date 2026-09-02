@@ -85,7 +85,8 @@ export const ModelName = {
   NavigationCategory: 'NavigationCategory',
   NavigationItem: 'NavigationItem',
   Report: 'Report',
-  Ad: 'Ad'
+  Ad: 'Ad',
+  FriendlyLink: 'FriendlyLink'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -645,6 +646,23 @@ export const AdScalarFieldEnum = {
 } as const
 
 export type AdScalarFieldEnum = (typeof AdScalarFieldEnum)[keyof typeof AdScalarFieldEnum]
+
+
+export const FriendlyLinkScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  url: 'url',
+  logo: 'logo',
+  description: 'description',
+  sortOrder: 'sortOrder',
+  status: 'status',
+  target: 'target',
+  rel: 'rel',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type FriendlyLinkScalarFieldEnum = (typeof FriendlyLinkScalarFieldEnum)[keyof typeof FriendlyLinkScalarFieldEnum]
 
 
 export const SortOrder = {

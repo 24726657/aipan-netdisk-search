@@ -751,3 +751,24 @@ model Ad {
   @@index([startTime])
   @@index([endTime])
 }
+
+// ============================================================
+// 友情链接模型
+// ============================================================
+model FriendlyLink {
+  id          Int      @id @default(autoincrement())
+  name        String   @db.VarChar(100)
+  url         String   @db.Text
+  logo        String?  @db.Text
+  description String?  @db.Text
+  sortOrder   Int      @default(0) @map("sort_order")
+  status      Boolean  @default(true)
+  target      String   @default("_blank") @db.VarChar(10)
+  rel         String   @default("nofollow noopener") @db.VarChar(100)
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@map("friendly_links")
+  @@index([status])
+  @@index([sortOrder])
+}
