@@ -727,7 +727,7 @@ model Report {
 }
 
 // ============================================================
-// 广告位模型（已添加 imageWidth 和 imageHeight）
+// 广告位模型（支持定时上下架）
 // ============================================================
 model Ad {
   id           Int      @id @default(autoincrement())
@@ -737,8 +737,10 @@ model Ad {
   sortOrder    Int      @default(0) @map("sort_order")
   status       Boolean  @default(true)
   type         String   @default("image") // "image" 或 "text"
-  imageWidth   Int?     @map("image_width")   // 新增：图片宽度（像素）
-  imageHeight  Int?     @map("image_height")  // 新增：图片高度（像素）
+  imageWidth   Int?     @map("image_width")   // 图片宽度（像素）
+  imageHeight  Int?     @map("image_height")  // 图片高度（像素）
+  startTime    DateTime? @map("start_time")   // 开始展示时间，为空表示立即生效
+  endTime      DateTime? @map("end_time")     // 结束展示时间，为空表示永久有效
   createdAt    DateTime @default(now()) @map("created_at")
   updatedAt    DateTime @updatedAt @map("updated_at")
 
@@ -746,4 +748,6 @@ model Ad {
   @@index([type])
   @@index([status])
   @@index([sortOrder])
+  @@index([startTime])
+  @@index([endTime])
 }

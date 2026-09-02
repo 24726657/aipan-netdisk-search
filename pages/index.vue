@@ -469,7 +469,7 @@ const stopRouteWatcher = watch(
            ============================================================ -->
       <div class="max-w-[1240px] mx-auto mt-4 px-4 space-y-3">
 
-        <!-- 1. 顶部横幅（7:1 比例，比原来更窄） -->
+        <!-- 1. 顶部横幅（7:1 比例） -->
         <div class="w-full aspect-[7/1] rounded-xl overflow-hidden bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20">
           <template v-if="getAdByTypeAndSortOrder('image', 0)">
             <a :href="getAdByTypeAndSortOrder('image', 0).linkUrl" target="_blank" rel="nofollow" class="block w-full h-full">
@@ -482,11 +482,12 @@ const stopRouteWatcher = watch(
               />
             </a>
           </template>
+          <!-- 无广告时：更醒目的占位 + 虚线边框 -->
           <template v-else>
-            <div class="w-full h-full flex flex-col items-center justify-center">
-              <i class="fas fa-ad text-3xl text-blue-400 dark:text-blue-500 mb-2"></i>
-              <span class="text-base font-bold text-gray-700 dark:text-gray-300">顶部横幅广告位</span>
-              <span class="text-xs text-gray-500 dark:text-gray-400">7:1 比例</span>
+            <div class="w-full h-full flex flex-col items-center justify-center border-2 border-dashed border-blue-400 dark:border-blue-500 bg-white/60 dark:bg-gray-800/60 rounded-xl">
+              <i class="fas fa-ad text-4xl text-blue-500 dark:text-blue-400 mb-2"></i>
+              <span class="text-lg font-bold text-gray-800 dark:text-gray-200">顶部横幅广告位</span>
+              <span class="text-sm text-blue-600 dark:text-blue-400 font-medium">🔥 火爆招租中，点击了解投放详情</span>
             </div>
           </template>
         </div>

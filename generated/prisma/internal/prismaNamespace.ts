@@ -3755,6 +3755,10 @@ export const AdScalarFieldEnum = {
   sortOrder: 'sortOrder',
   status: 'status',
   type: 'type',
+  imageWidth: 'imageWidth',
+  imageHeight: 'imageHeight',
+  startTime: 'startTime',
+  endTime: 'endTime',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const

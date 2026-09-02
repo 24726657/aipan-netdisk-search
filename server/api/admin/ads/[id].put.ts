@@ -4,7 +4,7 @@ import prisma from "~/lib/prisma"
 export default defineEventHandler(async (event) => {
   const id = Number(getRouterParam(event, 'id'))
   const body = await readBody(event)
-  const { title, imageUrl, linkUrl, sortOrder, status, type } = body
+  const { title, imageUrl, linkUrl, sortOrder, status, type, startTime, endTime, imageWidth, imageHeight } = body
 
   // 检查同一类型 + 同一位置是否已有其他启用广告（排除自身）
   const existing = await prisma.ad.findFirst({
@@ -12,7 +12,7 @@ export default defineEventHandler(async (event) => {
       type: type || 'image',
       sortOrder: Number(sortOrder),
       status: true,
-      NOT: { id: id },
+      id: { not: id },
     },
   })
 
@@ -27,12 +27,16 @@ export default defineEventHandler(async (event) => {
     where: { id },
     data: {
       title,
-      imageUrl,
-      linkUrl,
+      imageUrl: type === 'image' ? imageUrl : '',
+      linkUrl: linkUrl || '',
       sortOrder: Number(sortOrder),
-      status: Boolean(status),
+      status: status === undefined ? true : Boolean(status),
       type: type || 'image',
+      imageWidth: imageWidth || 0,
+      imageHeight: imageHeight || 0,
+      startTime: startTime ? new Date(startTime) : null,
+      endTime: endTime ? new Date(endTime) : null,
     },
   })
-  return { code: 200, data: ad }
+  return { code: 200, data: ad, msg: '更新成功' }
 })
