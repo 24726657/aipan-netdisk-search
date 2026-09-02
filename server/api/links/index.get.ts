@@ -9,16 +9,11 @@ import prisma from "~/lib/prisma"
 
 export default defineEventHandler(async () => {
   const links = await prisma.friendlyLink.findMany({
-    where: { status: true },
-    orderBy: { sortOrder: 'asc' },
-    select: {
-      id: true,
-      name: true,
-      url: true,
-      logo: true,
-      description: true,
-      target: true,
+    where: {
+      status: true,
+      reviewStatus: 'approved',
     },
+    orderBy: { sortOrder: 'asc' },
   })
   return { code: 200, data: links }
 })

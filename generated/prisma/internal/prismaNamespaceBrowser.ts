@@ -658,6 +658,13 @@ export const FriendlyLinkScalarFieldEnum = {
   status: 'status',
   target: 'target',
   rel: 'rel',
+  reviewStatus: 'reviewStatus',
+  submitterName: 'submitterName',
+  submitterEmail: 'submitterEmail',
+  submitterRemark: 'submitterRemark',
+  reviewedAt: 'reviewedAt',
+  reviewedBy: 'reviewedBy',
+  rejectReason: 'rejectReason',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const

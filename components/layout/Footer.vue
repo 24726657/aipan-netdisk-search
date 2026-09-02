@@ -1,7 +1,8 @@
 <script setup>
-import { useI18n } from 'vue-i18n';
+import { ref, onMounted } from 'vue'
+import { useI18n } from 'vue-i18n'
 
-const { t } = useI18n();
+const { t } = useI18n()
 
 const footerLinks = [
   { name: 'footer.links.about', path: '/about' },
@@ -10,22 +11,22 @@ const footerLinks = [
   { name: 'footer.links.disclaimer', path: '/disclaimer' },
   { name: 'footer.links.copyright', path: '/copyright' },
   { name: 'footer.links.releases', path: '/releases' },
-];
+]
 
-// 友情链接数据
-const links = ref([]);
+const links = ref([])
+
 const fetchLinks = async () => {
   try {
-    const res = await $fetch('/api/links');
-    links.value = res.data || [];
+    const res = await $fetch('/api/links')
+    links.value = res.data || []
   } catch (e) {
-    links.value = [];
+    links.value = []
   }
-};
+}
 
 onMounted(() => {
-  fetchLinks();
-});
+  fetchLinks()
+})
 </script>
 
 <template>
@@ -53,14 +54,17 @@ onMounted(() => {
       {{ $t('footer.copyright') }}
     </p>
     <!-- 页脚链接 -->
-    <div class="flex items-center justify-center space-x-4">
+    <div class="flex items-center justify-center space-x-4 flex-wrap gap-x-2 gap-y-1">
       <template v-for="(link, index) in footerLinks" :key="link.path">
-        <nuxt-link :to="link.path"
-          class="text-sm text-gray-600 hover:text-blue-500 dark:text-gray-400 dark:hover:text-blue-400 transition-colors duration-300">
+        <nuxt-link :to="link.path" class="text-sm text-gray-600 hover:text-blue-500 dark:text-gray-400 dark:hover:text-blue-400 transition-colors duration-300">
           {{ $t(link.name) }}
         </nuxt-link>
         <span v-if="index < footerLinks.length - 1" class="text-gray-300 dark:text-gray-600">|</span>
       </template>
+      <span class="text-gray-300 dark:text-gray-600">|</span>
+      <nuxt-link to="/submit-link" class="text-sm text-gray-600 hover:text-blue-500 dark:text-gray-400 dark:hover:text-blue-400 transition-colors duration-300">
+        提交友情链接
+      </nuxt-link>
     </div>
 
     <!-- 声明信息 -->
