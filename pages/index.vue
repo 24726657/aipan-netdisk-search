@@ -34,6 +34,25 @@ const getAdByTypeAndSortOrder = (type, sortOrder) => {
   return ads.value.find(ad => ad.type === type && ad.sortOrder === sortOrder) || null
 }
 
+// 文字广告颜色数组（10个不同颜色）
+const textAdColors = [
+  '#ef4444', // 1 - 红色
+  '#f97316', // 2 - 橙色
+  '#eab308', // 3 - 金色
+  '#22c55e', // 4 - 绿色
+  '#3b82f6', // 5 - 蓝色
+  '#a855f7', // 6 - 紫色
+  '#ec4899', // 7 - 粉色
+  '#06b6d4', // 8 - 青色
+  '#f43f5e', // 9 - 玫瑰红
+  '#10b981', // 10 - 翠绿
+]
+
+// 获取文字广告颜色
+const getTextAdColor = (index) => {
+  return textAdColors[(index - 1) % textAdColors.length]
+}
+
 const searchKeyword = ref("");
 const router = useRouter();
 const { locale, locales, setLocale, t } = useI18n();
@@ -446,71 +465,80 @@ const stopRouteWatcher = watch(
       </div>
 
       <!-- ============================================================
-           广告位区域（固定高度，object-contain 完整显示）
+           广告位区域（顶部横幅 7:1，网格广告 7:2，文字广告彩色）
            ============================================================ -->
       <div class="max-w-[1240px] mx-auto mt-4 px-4 space-y-3">
 
-        <!-- 1. 图片广告区域 -->
-        <!-- 顶部横幅（sortOrder === 0）固定高度 150px -->
-        <div class="w-full h-[150px]">
+        <!-- 1. 顶部横幅（7:1 比例，比原来更窄） -->
+        <div class="w-full aspect-[7/1] rounded-xl overflow-hidden bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20">
           <template v-if="getAdByTypeAndSortOrder('image', 0)">
             <a :href="getAdByTypeAndSortOrder('image', 0).linkUrl" target="_blank" rel="nofollow" class="block w-full h-full">
               <img
                 :src="getAdByTypeAndSortOrder('image', 0).imageUrl"
                 :alt="getAdByTypeAndSortOrder('image', 0).title"
-                class="w-full h-full object-contain rounded-xl"
-                loading="lazy"
+                class="w-full h-full object-fill"
+                loading="eager"
+                fetchpriority="high"
               />
             </a>
           </template>
           <template v-else>
-            <div class="w-full h-full flex flex-col items-center justify-center bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 rounded-xl border-2 border-dashed border-blue-300 dark:border-blue-700">
+            <div class="w-full h-full flex flex-col items-center justify-center">
               <i class="fas fa-ad text-3xl text-blue-400 dark:text-blue-500 mb-2"></i>
               <span class="text-base font-bold text-gray-700 dark:text-gray-300">顶部横幅广告位</span>
-              <span class="text-xs text-gray-500 dark:text-gray-400">点击了解投放详情</span>
+              <span class="text-xs text-gray-500 dark:text-gray-400">7:1 比例</span>
             </div>
           </template>
         </div>
 
-        <!-- 图片网格广告（sortOrder === 1, 2, 3）固定高度 120px -->
+        <!-- 2. 图片网格广告（7:2 比例） -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-          <div v-for="order in [1, 2, 3]" :key="order" class="w-full h-[120px]">
+          <div v-for="order in [1, 2, 3]" :key="order" class="w-full aspect-[7/2] rounded-xl overflow-hidden bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border border-gray-100 dark:border-gray-700">
             <template v-if="getAdByTypeAndSortOrder('image', order)">
-              <div class="w-full h-full bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-xl shadow-sm hover:shadow-md transition-shadow duration-300 border border-gray-100 dark:border-gray-700 overflow-hidden">
-                <p class="text-[10px] text-gray-400 dark:text-gray-500 text-center pt-1">广告</p>
-                <a :href="getAdByTypeAndSortOrder('image', order).linkUrl" target="_blank" rel="nofollow" class="block w-full h-[calc(100%-20px)]">
+              <div class="w-full h-full relative">
+                <span class="absolute top-1 left-2 text-[10px] text-white bg-black/50 px-1.5 py-0.5 rounded z-10">广告</span>
+                <a :href="getAdByTypeAndSortOrder('image', order).linkUrl" target="_blank" rel="nofollow" class="block w-full h-full">
                   <img
                     :src="getAdByTypeAndSortOrder('image', order).imageUrl"
                     :alt="getAdByTypeAndSortOrder('image', order).title"
-                    class="w-full h-full object-contain rounded-lg"
+                    class="w-full h-full object-fill"
                     loading="lazy"
                   />
                 </a>
               </div>
             </template>
             <template v-else>
-              <div class="w-full h-full flex flex-col items-center justify-center bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-xl border-2 border-dashed border-gray-300 dark:border-gray-600 hover:shadow-lg transition-all duration-300 cursor-pointer group hover:border-blue-400 dark:hover:border-blue-500">
-                <i class="fas fa-image text-2xl text-gray-400 dark:text-gray-500 mb-1 group-hover:scale-110 transition-transform"></i>
+              <div class="w-full h-full flex flex-col items-center justify-center border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-xl">
+                <i class="fas fa-image text-2xl text-gray-400 dark:text-gray-500 mb-1"></i>
                 <span class="text-sm font-medium text-gray-600 dark:text-gray-400">广告位招租</span>
-                <span class="text-xs text-gray-400 dark:text-gray-500">点此投放</span>
+                <span class="text-xs text-gray-400 dark:text-gray-500">7:2 比例</span>
               </div>
             </template>
           </div>
         </div>
 
-        <!-- 2. 文字广告区域（10个，sortOrder 1~10） -->
+        <!-- 3. 文字广告（10个，每个不同彩色） -->
         <div class="mt-4">
           <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2">
-            <div v-for="i in 10" :key="i" class="min-h-[56px] bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-lg border border-gray-200 dark:border-gray-700 p-2 text-center hover:shadow-md transition-all duration-300 cursor-pointer group hover:border-blue-400 dark:hover:border-blue-500 flex items-center justify-center overflow-hidden">
+            <div v-for="i in 10" :key="i" 
+                 class="min-h-[56px] bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-lg border border-gray-200 dark:border-gray-700 p-2 text-center hover:shadow-md transition-all duration-300 cursor-pointer group hover:border-blue-400 dark:hover:border-blue-500 flex items-center justify-center overflow-hidden">
               <template v-if="getAdByTypeAndSortOrder('text', i)">
                 <a :href="getAdByTypeAndSortOrder('text', i).linkUrl" target="_blank" rel="nofollow" class="block w-full">
-                  <span class="text-xs text-gray-600 dark:text-gray-400 group-hover:text-blue-500 dark:group-hover:text-blue-400 transition-colors line-clamp-2">
+                  <span 
+                    class="text-xs font-semibold transition-colors line-clamp-2"
+                    :style="{ color: getTextAdColor(i) }"
+                  >
                     {{ getAdByTypeAndSortOrder('text', i).title }}
                   </span>
                 </a>
               </template>
               <template v-else>
-                <span class="text-xs text-gray-600 dark:text-gray-400 group-hover:text-blue-500 dark:group-hover:text-blue-400 transition-colors">广告位招租</span>
+                <span 
+                  class="text-xs font-semibold transition-colors"
+                  :style="{ color: getTextAdColor(i) }"
+                >
+                  广告位招租
+                </span>
               </template>
             </div>
           </div>

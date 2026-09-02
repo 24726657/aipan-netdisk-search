@@ -51,13 +51,15 @@
     <el-dialog v-model="dialogVisible" :title="dialogTitle" width="550px" top="5vh">
       <el-form :model="form" label-width="100px">
         <el-form-item label="标题">
-          <el-input v-model="form.title"></el-input>
+          <el-input v-model="form.title" placeholder="请输入广告标题"></el-input>
         </el-form-item>
         <el-form-item v-if="form.type === 'image'" label="图片链接">
-          <el-input v-model="form.imageUrl" placeholder="https://example.com/ad.jpg"></el-input>
+          <el-input v-model="form.imageUrl" placeholder="https://img.cdn1.vip/i/xxxxx.webp"></el-input>
+          <div class="text-xs text-gray-400 mt-1">建议比例：顶部横幅 5:1，网格广告 4:3</div>
         </el-form-item>
         <el-form-item label="跳转链接">
           <el-input v-model="form.linkUrl" placeholder="https://example.com"></el-input>
+          <div v-if="form.type === 'text'" class="text-xs text-gray-400 mt-1">文字广告的链接为选填</div>
         </el-form-item>
         <el-form-item label="类型">
           <el-radio-group v-model="form.type" @change="onTypeChange">
@@ -83,7 +85,7 @@
       </el-form>
       <template #footer>
         <el-button @click="dialogVisible = false">取消</el-button>
-        <el-button type="primary" @click="submitForm">确认</el-button>
+        <el-button type="primary" :loading="submitting" @click="submitForm">确认</el-button>
       </template>
     </el-dialog>
   </div>
@@ -101,10 +103,10 @@ import { ElMessage, ElMessageBox } from 'element-plus'
 // 位置配置
 // ============================================================
 const imagePositionMap = {
-  0: { name: '顶部横幅', type: 'primary' },
-  1: { name: '网格1', type: 'success' },
-  2: { name: '网格2', type: 'warning' },
-  3: { name: '网格3', type: 'info' },
+  0: { name: '顶部横幅 (5:1)', type: 'primary' },
+  1: { name: '网格1 (4:3)', type: 'success' },
+  2: { name: '网格2 (4:3)', type: 'warning' },
+  3: { name: '网格3 (4:3)', type: 'info' },
 }
 
 const textPositionMap = {}
@@ -171,6 +173,7 @@ const ads = ref([])
 const dialogVisible = ref(false)
 const dialogTitle = ref('')
 const isEdit = ref(false)
+const submitting = ref(false)
 
 const form = reactive({
   id: null,
@@ -185,10 +188,10 @@ const form = reactive({
 const currentPositionOptions = computed(() => {
   if (form.type === 'image') {
     return [
-      { label: '顶部横幅', value: 0 },
-      { label: '网格1', value: 1 },
-      { label: '网格2', value: 2 },
-      { label: '网格3', value: 3 },
+      { label: '顶部横幅 (5:1)', value: 0 },
+      { label: '网格1 (4:3)', value: 1 },
+      { label: '网格2 (4:3)', value: 2 },
+      { label: '网格3 (4:3)', value: 3 },
     ]
   } else {
     return Array.from({ length: 10 }, (_, i) => ({
@@ -203,13 +206,14 @@ const onTypeChange = () => {
     form.sortOrder = 0
   } else {
     form.sortOrder = 1
+    form.imageUrl = ''
   }
 }
 
 const fetchAds = async () => {
   try {
     const res = await $fetchWithAuth('/api/admin/ads')
-    ads.value = res.data
+    ads.value = res.data || []
   } catch (err) {
     console.error('获取广告列表失败:', err)
     ElMessage.error('获取广告列表失败，请刷新重试')
@@ -219,13 +223,12 @@ const fetchAds = async () => {
 const openAddDialog = () => {
   isEdit.value = false
   dialogTitle.value = '添加广告'
-  const defaultSortOrder = form.type === 'image' ? 0 : 1
   Object.assign(form, {
     id: null,
     title: '',
     imageUrl: '',
     linkUrl: '',
-    sortOrder: defaultSortOrder,
+    sortOrder: 0,
     status: true,
     type: 'image',
   })
@@ -240,6 +243,16 @@ const openEditDialog = (row) => {
 }
 
 const submitForm = async () => {
+  if (!form.title) {
+    ElMessage.warning('请输入广告标题')
+    return
+  }
+  if (form.type === 'image' && !form.imageUrl) {
+    ElMessage.warning('请输入图片链接')
+    return
+  }
+
+  submitting.value = true
   try {
     const payload = { ...form }
     if (payload.type === 'text') {
@@ -263,6 +276,8 @@ const submitForm = async () => {
   } catch (err) {
     console.error('提交广告失败:', err)
     ElMessage.error('操作失败，请稍后重试')
+  } finally {
+    submitting.value = false
   }
 }
 
