@@ -1,6 +1,6 @@
 export default defineEventHandler((event) => {
     const config = useRuntimeConfig();
-    const allowedOrigins = (config.corsAllowedOrigins || 'https://aipan.me,https://www.aipan.me')
+    const allowedOrigins = (config.corsAllowedOrigins || 'https://sjdh898.top,https://sjdh898.top')
         .split(',')
         .map((o: string) => o.trim())
         .filter(Boolean);

@@ -87,7 +87,7 @@
           <el-form-item label="站点地址" prop="siteUrl">
             <el-input
               v-model="emailForm.siteUrl"
-              placeholder="https://www.aipan.me"
+              placeholder="https://sjdh898.top"
             />
             <div class="mt-1 text-xs text-gray-500 dark:text-gray-400">
               邮件中的激活链接将指向该地址下的 /email-verify 页面

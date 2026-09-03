@@ -165,7 +165,7 @@ useHead({
     },
     {
       property: "og:url",
-      content: computed(() => `https://www.aipan.me/blog/${route.params.slug}`),
+      content: computed(() => `https://sjdh898.top/blog/${route.params.slug}`),
     },
     // Twitter
     { name: "twitter:card", content: "summary_large_image" },
@@ -216,7 +216,7 @@ useHead({
   link: [
     {
       rel: "canonical",
-      href: computed(() => `https://www.aipan.me/blog/${route.params.slug}`),
+      href: computed(() => `https://sjdh898.top/blog/${route.params.slug}`),
     },
   ],
   // 添加结构化数据
@@ -240,14 +240,14 @@ useHead({
             name: "MISO",
             logo: {
               "@type": "ImageObject",
-              url: "https://www.aipan.me/logo-1.png",
+              url: "https://sjdh898.top/logo-1.png",
             },
           },
           datePublished: blog.value.createdAt,
           dateModified: blog.value.updatedAt || blog.value.createdAt,
           mainEntityOfPage: {
             "@type": "WebPage",
-            "@id": `https://www.aipan.me/blog/${route.params.slug}`,
+            "@id": `https://sjdh898.top/blog/${route.params.slug}`,
           },
         });
       }),

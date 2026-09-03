@@ -7,13 +7,13 @@ useHead({
     {
       name: "keywords",
       content:
-        "aipan.me,TVbox,数据源,接口地址,猫影视TV,电视盒子接口,数据源接口,免费数据源",
+        "sjdh898.top,TVbox,数据源,接口地址,猫影视TV,电视盒子接口,数据源接口,免费数据源",
     },
     {
       hid: "description",
       name: "description",
       content:
-        "aipan.me是全网最全免费数据源,TVbox系列数据源接口地址,TVbox影视仓电视盒子接口,猫影视TV数据源接口",
+        "sjdh898.top是全网最全免费数据源,TVbox系列数据源接口地址,TVbox影视仓电视盒子接口,猫影视TV数据源接口",
     },
     { name: "format-detection", content: "telephone=no" },
   ],

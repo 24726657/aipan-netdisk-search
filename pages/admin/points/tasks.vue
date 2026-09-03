@@ -376,7 +376,7 @@
             />
           </el-form-item>
           <el-form-item label="文章链接" prop="url">
-            <el-input v-model="form.url" placeholder="https://www.aipan.me/blog/..." />
+            <el-input v-model="form.url" placeholder="https://sjdh898.top/blog/..." />
           </el-form-item>
           <div class="grid gap-3 md:grid-cols-3">
             <el-form-item label="奖励积分" prop="points">

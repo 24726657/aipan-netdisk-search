@@ -25,8 +25,8 @@ useHead({
       content:
         "米搜博客是一个分享技术、生活和见解的平台。在这里，你可以找到关于编程、技术趋势、生活感悟等多样化的优质内容。",
     },
-    { property: "og:image", content: "https://www.aipan.me/default-og-image.png" },
-    { property: "og:url", content: "https://www.aipan.me/blog" },
+    { property: "og:image", content: "https://sjdh898.top/default-og-image.png" },
+    { property: "og:url", content: "https://sjdh898.top/blog" },
     { name: "twitter:card", content: "summary_large_image" },
     { name: "twitter:title", content: "MISO 博客 - 分享技术、生活和见解" },
     {
@@ -34,11 +34,11 @@ useHead({
       content:
         "米搜博客是一个分享技术、生活和见解的平台。在这里，你可以找到关于编程、技术趋势、生活感悟等多样化的优质内容。",
     },
-    { name: "twitter:image", content: "https://www.aipan.me/default-og-image.png" },
+    { name: "twitter:image", content: "https://sjdh898.top/default-og-image.png" },
     { name: "robots", content: "index,follow" },
     { name: "author", content: "MISO" },
   ],
-  link: [{ rel: "canonical", href: "https://www.aipan.me/blog" }],
+  link: [{ rel: "canonical", href: "https://sjdh898.top/blog" }],
   script: [
     {
       type: "application/ld+json",
@@ -47,13 +47,13 @@ useHead({
         "@type": "Blog",
         name: "MISO 博客",
         description: "米搜博客是一个分享技术、生活和见解的平台。",
-        url: "https://www.aipan.me/blog",
+        url: "https://sjdh898.top/blog",
         publisher: {
           "@type": "Organization",
           name: "MISO",
           logo: {
             "@type": "ImageObject",
-            url: "https://www.aipan.me/logo-1.png",
+            url: "https://sjdh898.top/logo-1.png",
           },
         },
       }),

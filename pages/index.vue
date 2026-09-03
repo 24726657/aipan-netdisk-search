@@ -106,16 +106,16 @@ useHead({
     { property: "og:type", content: "website" },
     { property: "og:title", content: t('meta.title') },
     { property: "og:description", content: t('meta.description') },
-    { property: "og:image", content: "https://www.aipan.me/default-og-image.png" },
+    { property: "og:image", content: "https://sjdh898.top/default-og-image.png" },
     { name: "twitter:card", content: "summary_large_image" },
     { name: "twitter:title", content: t('meta.title') },
     { name: "twitter:description", content: t('meta.description') },
-    { name: "twitter:image", content: "https://www.aipan.me/default-og-image.png" },
+    { name: "twitter:image", content: "https://sjdh898.top/default-og-image.png" },
     { name: "robots", content: "index,follow" },
     { name: "author", content: "MISO" },
     { name: "viewport", content: "width=device-width, initial-scale=1" },
   ],
-  link: [{ rel: "canonical", href: "https://www.aipan.me" }],
+  link: [{ rel: "canonical", href: "https://sjdh898.top" }],
   script: [
     {
       type: 'application/ld+json',
@@ -124,20 +124,20 @@ useHead({
         "@type": "WebSite",
         "name": "米搜",
         "alternateName": "MISO",
-        "url": "https://www.aipan.me",
+        "url": "https://sjdh898.top",
         "description": "米搜是一个开源免费的资源搜索平台，提供网盘资源搜索、音乐下载、TV直播、TVBox接口地址以及博客发布等多项功能",
         "potentialAction": {
           "@type": "SearchAction",
           "target": {
             "@type": "EntryPoint",
-            "urlTemplate": "https://www.aipan.me/search?keyword={search_term_string}"
+            "urlTemplate": "https://sjdh898.top/search?keyword={search_term_string}"
           },
           "query-input": "required name=search_term_string"
         },
         "publisher": {
           "@type": "Organization",
           "name": "MISO",
-          "url": "https://www.aipan.me"
+          "url": "https://sjdh898.top"
         },
         "sameAs": [
           "https://github.com/aipan-me"

@@ -203,7 +203,7 @@ export async function checkShareLinkAvailability(link, options = {}) {
       signal: AbortSignal.timeout(timeoutMs),
       headers: {
         "user-agent":
-          "Mozilla/5.0 (compatible; AipanBot/1.0; +https://aipan.me)",
+          "Mozilla/5.0 (compatible; AipanBot/1.0; +https://sjdh898.top)",
         accept: "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
       },
     });

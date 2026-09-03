@@ -110,7 +110,7 @@ useHead({
         },
     ],
     link: [
-        { rel: 'canonical', href: 'https://www.aipan.me/movie/daily' }
+        { rel: 'canonical', href: 'https://sjdh898.top/movie/daily' }
     ]
 })
 

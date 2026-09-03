@@ -3,7 +3,7 @@ const error = useError()
 
 // SEO 配置
 useHead({
-  title: `${error.value?.statusCode || 404} - 页面未找到 - 米搜 - aipan.me`,
+  title: `${error.value?.statusCode || 404} - 页面未找到 - 米搜 - sjdh898.top`,
   meta: [
     { name: 'robots', content: 'noindex,nofollow' }
   ]
