@@ -193,9 +193,14 @@
                                 {{ pointsDetail.user.email }}
                             </div>
                         </div>
-                        <el-tag :type="pointsDetail.user.status === 'active' ? 'success' : 'danger'">
-                            {{ pointsDetail.user.status === 'active' ? '活跃' : '禁用' }}
-                        </el-tag>
+                        <div class="flex items-center gap-3">
+                            <el-tag :type="pointsDetail.user.status === 'active' ? 'success' : 'danger'">
+                                {{ pointsDetail.user.status === 'active' ? '活跃' : '禁用' }}
+                            </el-tag>
+                            <el-button type="primary" size="small" @click="openAdjustPointsDialog(pointsDetail.user)">
+                                调整积分
+                            </el-button>
+                        </div>
                     </div>
                 </div>
 
@@ -299,6 +304,58 @@
                 </div>
             </div>
         </el-dialog>
+
+        <!-- ============================================================
+             积分调整对话框（新增）
+             ============================================================ -->
+        <el-dialog
+            v-model="adjustPointsDialogVisible"
+            :title="`调整积分 - ${adjustPointsUser?.username || ''}`"
+            width="480px"
+            destroy-on-close
+        >
+            <el-form :model="adjustPointsForm" label-width="100px" ref="adjustPointsFormRef" :rules="adjustPointsRules">
+                <el-form-item label="当前积分">
+                    <span class="font-bold text-blue-600">{{ adjustPointsUser?.effectivePoints ?? 0 }}</span>
+                </el-form-item>
+                <el-form-item label="变动分值" prop="points">
+                    <el-input-number
+                        v-model="adjustPointsForm.points"
+                        :min="-999999"
+                        :max="999999"
+                        :step="10"
+                        placeholder="正数增加，负数减少"
+                        class="w-full"
+                    />
+                    <div class="text-xs text-gray-400 mt-1">正数增加积分，负数扣除积分</div>
+                </el-form-item>
+                <el-form-item label="变动类型" prop="type">
+                    <el-select v-model="adjustPointsForm.type" placeholder="请选择类型" class="w-full">
+                        <el-option label="管理员调整" value="admin"></el-option>
+                        <el-option label="奖励" value="reward"></el-option>
+                        <el-option label="惩罚" value="penalty"></el-option>
+                        <el-option label="补偿" value="compensation"></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="变动原因" prop="reason">
+                    <el-input
+                        v-model="adjustPointsForm.reason"
+                        type="textarea"
+                        :rows="3"
+                        placeholder="请填写积分变动原因，如：活动奖励、违规扣除等"
+                    />
+                </el-form-item>
+                <div v-if="adjustPointsForm.points !== 0 && !isNaN(adjustPointsForm.points)" class="text-sm text-gray-500">
+                    调整后积分：<span class="font-bold" :class="(adjustPointsUser?.effectivePoints || 0) + adjustPointsForm.points < 0 ? 'text-red-600' : 'text-green-600'">
+                        {{ (adjustPointsUser?.effectivePoints || 0) + adjustPointsForm.points }}
+                    </span>
+                </div>
+            </el-form>
+            <template #footer>
+                <el-button @click="adjustPointsDialogVisible = false">取消</el-button>
+                <el-button type="primary" :loading="submittingAdjustPoints" @click="submitAdjustPoints">确认调整</el-button>
+            </template>
+        </el-dialog>
     </div>
 </template>
 
@@ -355,7 +412,102 @@ const pointsDetail = ref({
     }
 })
 
+// ============================================================
+// 积分调整（新增）
+// ============================================================
+const adjustPointsDialogVisible = ref(false)
+const adjustPointsUser = ref(null)
+const adjustPointsFormRef = ref(null)
+const submittingAdjustPoints = ref(false)
+const adjustPointsForm = reactive({
+    points: 0,
+    type: 'admin',
+    reason: '',
+})
+
+const adjustPointsRules = {
+    points: [
+        {
+            validator: (rule, value, callback) => {
+                if (value === undefined || value === null || value === 0) {
+                    callback(new Error('请输入有效的积分数量（不能为0）'))
+                } else {
+                    callback()
+                }
+            },
+            trigger: 'blur'
+        }
+    ],
+    type: [
+        { required: true, message: '请选择变动类型', trigger: 'change' }
+    ],
+    reason: [
+        { required: true, message: '请填写变动原因', trigger: 'blur' }
+    ]
+}
+
+// 打开积分调整对话框
+const openAdjustPointsDialog = (user) => {
+    adjustPointsUser.value = user
+    adjustPointsForm.points = 0
+    adjustPointsForm.type = 'admin'
+    adjustPointsForm.reason = ''
+    adjustPointsDialogVisible.value = true
+    setTimeout(() => {
+        adjustPointsFormRef.value?.clearValidate()
+    }, 100)
+}
+
+// 提交积分调整
+const submitAdjustPoints = async () => {
+    if (!adjustPointsFormRef.value) return
+    try {
+        await adjustPointsFormRef.value.validate()
+    } catch {
+        return
+    }
+
+    const userId = adjustPointsUser.value?.id || selectedPointsUser.value?.id
+    if (!userId) {
+        ElMessage.error('用户ID不存在')
+        return
+    }
+
+    submittingAdjustPoints.value = true
+    try {
+        const response = await $fetch(`/api/admin/users/${userId}/points`, {
+            method: 'POST',
+            body: {
+                points: adjustPointsForm.points,
+                type: adjustPointsForm.type,
+                reason: adjustPointsForm.reason,
+            },
+            headers: {
+                "authorization": "Bearer " + useCookie('token').value
+            }
+        })
+
+        if (response.code === 200) {
+            ElMessage.success(response.msg || '积分调整成功')
+            adjustPointsDialogVisible.value = false
+            // 刷新积分详情
+            await fetchUserPoints()
+            // 刷新用户列表
+            await fetchUsers()
+        } else {
+            ElMessage.error(response.msg || '积分调整失败')
+        }
+    } catch (error) {
+        console.error('调整积分失败:', error)
+        ElMessage.error(error?.data?.message || error?.message || '积分调整失败')
+    } finally {
+        submittingAdjustPoints.value = false
+    }
+}
+
+// ============================================================
 // 表单数据
+// ============================================================
 const formRef = ref(null)
 const userForm = reactive({
     username: '',
@@ -673,7 +825,10 @@ const getPointTypeName = (type) => {
         transfer: '转存奖励',
         registration_gift: '注册礼包',
         redemption: '兑换码奖励',
-        daily_redemption_drop: '每日福利'
+        daily_redemption_drop: '每日福利',
+        reward: '奖励',
+        penalty: '惩罚',
+        compensation: '补偿'
     }
     return typeMap[type] || type || '-'
 }
@@ -689,7 +844,10 @@ const getPointTypeTag = (type) => {
         transfer: 'primary',
         registration_gift: 'success',
         redemption: 'success',
-        daily_redemption_drop: 'success'
+        daily_redemption_drop: 'success',
+        reward: 'success',
+        penalty: 'danger',
+        compensation: 'warning'
     }
     return typeMap[type] || 'info'
 }

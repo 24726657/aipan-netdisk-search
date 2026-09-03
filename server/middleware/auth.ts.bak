@@ -32,7 +32,7 @@ export default defineEventHandler(async (event: H3Event) => {
             (isUserRoute && !isPublicUserRoute) ||
             requestPath.startsWith("/api/upload") ||
             requestPath.startsWith("/api/notifications") ||
-            requestPath.startsWith("/api/chat") && !requestPath.startsWith("/api/chat/config")
+            requestPath.startsWith("/api/chat")
         );
 
         const authHeader = event.node.req.headers["authorization"];

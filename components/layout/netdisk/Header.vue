@@ -1,6 +1,6 @@
 <script setup>
-import { defineAsyncComponent, ref, onMounted, onBeforeUnmount } from "vue";
-import { useColorMode, useRoute } from "#imports";
+import { defineAsyncComponent, ref, onMounted, onBeforeUnmount, computed, watch } from "vue";
+import { useColorMode, useRoute, useAsyncData } from "#imports";
 import { useUserStore } from "~/stores/user";
 import { useI18n } from "vue-i18n";
 import { publicNavigation, isPublicNavItemActive, isPublicNavPathActive } from "~/utils/publicNavigation";
@@ -19,6 +19,45 @@ const navDropdownVisible = ref("");
 const userMenuRef = ref(null);
 const navMenuRef = ref(null);
 const { latestReleaseTitle, hasUnreadRelease, markReleaseRead } = useReleaseNotice();
+
+// ============================================================
+// 聊天功能控制
+// ============================================================
+const chatEnabled = ref(true);
+
+// 使用 useAsyncData 获取聊天配置
+const { data: chatConfig } = useAsyncData('chatConfig', async () => {
+  try {
+    const res = await $fetch('/api/chat/config');
+    return res.data;
+  } catch {
+    return { enabled: true };
+  }
+}, {
+  default: () => ({ enabled: true }),
+});
+
+// 更新 chatEnabled
+watch(chatConfig, (newVal) => {
+  chatEnabled.value = newVal?.enabled ?? true;
+}, { immediate: true });
+
+// 根据聊天状态过滤导航
+const filteredNavigation = computed(() => {
+  if (chatEnabled.value) {
+    return publicNavigation;
+  }
+  // 禁用时，从 community 中移除 chat
+  return publicNavigation.map(item => {
+    if (item.key === 'community') {
+      return {
+        ...item,
+        children: item.children?.filter(child => child.key !== 'chat')
+      };
+    }
+    return item;
+  });
+});
 
 // 获取可用的语言列表（当前语言除外）
 const availableLocales = computed(() => {
@@ -85,6 +124,7 @@ onBeforeUnmount(() => {
   document.removeEventListener("click", closeDropdown);
 });
 </script>
+
 <template>
   <div class="backdrop-blur py-4 fixed top-0 left-0 w-full z-50">
     <div class="max-w-[1240px] mx-auto flex flex-row items-center justify-between px-[20px]">
@@ -101,7 +141,7 @@ onBeforeUnmount(() => {
 
       <!-- Desktop Navigation -->
       <nav ref="navMenuRef" class="hidden md:flex flex-row items-center gap-1">
-        <div v-for="item in publicNavigation" :key="item.key" class="relative">
+        <div v-for="item in filteredNavigation" :key="item.key" class="relative">
           <nuxt-link
             v-if="item.path"
             :to="item.path"
@@ -159,7 +199,7 @@ onBeforeUnmount(() => {
       <!-- Mobile Navigation -->
       <div v-show="isMenuOpen" class="md:hidden absolute top-full left-0 w-full bg-white dark:bg-gray-800 shadow-lg">
         <div class="max-h-[calc(100vh-72px)] overflow-y-auto py-2">
-          <template v-for="item in publicNavigation" :key="item.key">
+          <template v-for="item in filteredNavigation" :key="item.key">
             <nuxt-link
               v-if="item.path"
               :to="item.path"

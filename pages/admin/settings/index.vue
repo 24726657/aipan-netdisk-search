@@ -143,6 +143,54 @@
         </el-form>
       </div>
 
+      <!-- ============================================================
+           聊天功能配置（新增）
+           ============================================================ -->
+      <div class="bg-white rounded-lg p-6 shadow-sm mb-6">
+        <div class="flex items-center justify-between mb-4">
+          <div class="flex items-center gap-2">
+            <h2 class="text-lg font-semibold dark:text-gray-200">
+              聊天功能配置
+            </h2>
+            <el-tag v-if="chatForm.enabled" type="success" size="small">
+              已启用
+            </el-tag>
+            <el-tag v-else type="info" size="small">已禁用</el-tag>
+          </div>
+          <div class="flex items-center gap-4">
+            <el-switch
+              v-model="chatForm.enabled"
+              active-text="启用聊天"
+              inactive-text="禁用聊天"
+              class="ml-2"
+              @change="handleChatSubmit"
+            />
+          </div>
+        </div>
+
+        <el-form label-width="120px">
+          <el-form-item label="功能说明">
+            <div class="text-sm text-gray-500 dark:text-gray-400">
+              开启后，用户可以在网站顶部导航栏看到「聊天」入口，并访问聊天功能。
+              <br />关闭后，聊天入口将被隐藏，用户无法访问聊天页面。
+            </div>
+          </el-form-item>
+
+          <el-form-item>
+            <div class="flex items-center gap-4">
+              <el-button
+                type="primary"
+                @click="handleChatSubmit"
+                :loading="chatLoading"
+              >
+                保存配置
+              </el-button>
+              <el-button @click="resetChatForm">重置</el-button>
+            </div>
+          </el-form-item>
+        </el-form>
+      </div>
+
       <!-- 群二维码配置 -->
       <div class="bg-white rounded-lg p-6 shadow-sm mb-6">
         <div class="flex items-center justify-between mb-4">
@@ -555,13 +603,85 @@ const emailTesting = ref(false);
 const musicLoading = ref(false);
 const groupQrLoading = ref(false);
 const accessControlLoading = ref(false);
+const chatLoading = ref(false);
 const resourceTypes = ref([]);
 
+// ============================================================
+// 聊天功能配置（新增）
+// ============================================================
+const chatForm = reactive({
+  enabled: true,
+});
+
+// 获取聊天配置
+const getChatConfig = async () => {
+  try {
+    const res = await $fetch("/api/chat/config", {
+      headers: {
+        Authorization: `Bearer ${useCookie("token").value}`,
+      },
+    });
+    if (res.code === 200) {
+      chatForm.enabled = res.data.enabled ?? true;
+    }
+  } catch (error) {
+    console.error("获取聊天配置失败:", error);
+    chatForm.enabled = true;
+  }
+};
+
+// 保存聊天配置
+const handleChatSubmit = async () => {
+  chatLoading.value = true;
+  try {
+    const res = await $fetch("/api/admin/chat/config", {
+      method: "PUT",
+      body: {
+        enabled: chatForm.enabled,
+      },
+      headers: {
+        Authorization: `Bearer ${useCookie("token").value}`,
+      },
+    });
+
+    if (res.code === 200) {
+      ElMessage.success(res.msg || `聊天功能已${chatForm.enabled ? '启用' : '禁用'}`);
+    } else {
+      ElMessage.error(res.msg || "保存失败");
+      chatForm.enabled = !chatForm.enabled;
+    }
+  } catch (error) {
+    console.error("保存聊天配置失败:", error);
+    ElMessage.error(error?.data?.msg || "保存配置失败");
+    chatForm.enabled = !chatForm.enabled;
+  } finally {
+    chatLoading.value = false;
+  }
+};
+
+// 重置聊天配置
+const resetChatForm = () => {
+  ElMessageBox.confirm("确定要重置聊天配置吗？", "提示", {
+    confirmButtonText: "确定",
+    cancelButtonText: "取消",
+    type: "warning",
+  }).then(() => {
+    chatForm.enabled = true;
+    handleChatSubmit();
+  });
+};
+
+// ============================================================
+// 音乐验证码配置
+// ============================================================
 const musicForm = reactive({
   enabled: true,
   password: "aipan.me2026",
 });
 
+// ============================================================
+// 群二维码配置
+// ============================================================
 const groupQrForm = reactive({
   enabled: true,
   title: "为防止网站和谐，请扫码获取最新网址",
@@ -571,6 +691,9 @@ const groupQrForm = reactive({
   showInSearchResults: true,
 });
 
+// ============================================================
+// 邮箱配置
+// ============================================================
 const emailConfigMeta = reactive({
   hasApiKey: false,
   apiKeyMasked: "",
@@ -589,6 +712,9 @@ const emailForm = reactive({
   testEmail: "",
 });
 
+// ============================================================
+// 访问限制配置
+// ============================================================
 const DEFAULT_ACCESS_CONTROL_FEATURES = {
   netdiskSearch: true,
   aiSearch: true,
@@ -653,6 +779,9 @@ const accessControlForm = reactive({
 
 const { setAccessControlConfig } = useAccessControlConfig();
 
+// ============================================================
+// 夸克网盘配置
+// ============================================================
 const DEFAULT_API_URL = "http://127.0.0.1:5000/api/quark/sharepage/save";
 const DEFAULT_ACCESS_DURATION = 1440;
 
@@ -667,6 +796,9 @@ const form = reactive({
   accessDurationMinutes: DEFAULT_ACCESS_DURATION,
 });
 
+// ============================================================
+// 表单校验规则
+// ============================================================
 const musicRules = {
   password: [
     { required: true, message: "请输入访问密码", trigger: "blur" },
@@ -918,47 +1050,12 @@ const rules = {
   ],
 };
 
-// 处理启用状态变化
-const handleEnabledChange = (value) => {
-  if (!value) {
-    ElMessageBox.confirm(
-      "关闭转存功能将停止所有自动转存操作，是否继续？",
-      "警告",
-      {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning",
-      }
-    )
-      .then(() => {
-        handleSubmit();
-      })
-      .catch(() => {
-        form.enabled = true;
-      });
-  }
-};
-
-// 重置 API URL
-const resetApiUrl = () => {
-  form.apiUrl = DEFAULT_API_URL;
-};
-
-// 重置表单
-const resetForm = () => {
-  ElMessageBox.confirm("确定要重置所有配置吗？", "提示", {
-    confirmButtonText: "确定",
-    cancelButtonText: "取消",
-    type: "warning",
-  }).then(() => {
-    formRef.value?.resetFields();
-    form.apiUrl = DEFAULT_API_URL;
-    form.verificationEnabled = false;
-    form.shareLink = "";
-    form.accessVerificationShareLink = "";
-    form.accessDurationMinutes = DEFAULT_ACCESS_DURATION;
-  });
-};
+// ============================================================
+// 方法
+// ============================================================
+const musicFormRef = ref(null);
+const groupQrFormRef = ref(null);
+const accessControlFormRef = ref(null);
 
 // 获取资源类型列表
 const getResourceTypes = async () => {
@@ -977,6 +1074,7 @@ const getResourceTypes = async () => {
   }
 };
 
+// 邮箱配置
 const getEmailConfig = async () => {
   try {
     const res = await $fetch("/api/admin/settings/email", {
@@ -1004,85 +1102,6 @@ const getEmailConfig = async () => {
     console.error("获取邮箱配置失败:", error);
     ElMessage.error("获取邮箱配置失败");
   }
-};
-
-const applyAccessControlConfig = (config = DEFAULT_ACCESS_CONTROL_CONFIG) => {
-  accessControlForm.enabled =
-    config.enabled ?? DEFAULT_ACCESS_CONTROL_CONFIG.enabled;
-  accessControlForm.requireLogin =
-    config.requireLogin ?? DEFAULT_ACCESS_CONTROL_CONFIG.requireLogin;
-  accessControlForm.minPoints =
-    Number(config.minPoints ?? DEFAULT_ACCESS_CONTROL_CONFIG.minPoints);
-
-  Object.keys(DEFAULT_ACCESS_CONTROL_FEATURES).forEach((key) => {
-    accessControlForm.protectedFeatures[key] =
-      config.protectedFeatures?.[key] ?? DEFAULT_ACCESS_CONTROL_FEATURES[key];
-  });
-};
-
-const getAccessControlConfig = async () => {
-  try {
-    const res = await $fetch("/api/admin/settings/access-control", {
-      headers: {
-        Authorization: `Bearer ${useCookie("token").value}`,
-      },
-    });
-
-    if (res.code === 200) {
-      applyAccessControlConfig(res.data);
-    }
-  } catch (error) {
-    console.error("获取访问限制配置失败:", error);
-    ElMessage.error("获取访问限制配置失败");
-  }
-};
-
-const handleAccessControlSubmit = async () => {
-  if (!accessControlFormRef.value) return;
-
-  try {
-    const valid = await accessControlFormRef.value.validate();
-    if (!valid) return;
-
-    accessControlLoading.value = true;
-
-    const res = await $fetch("/api/admin/settings/access-control", {
-      method: "POST",
-      body: {
-        enabled: accessControlForm.enabled,
-        requireLogin: accessControlForm.requireLogin,
-        minPoints: accessControlForm.minPoints,
-        protectedFeatures: { ...accessControlForm.protectedFeatures },
-      },
-      headers: {
-        Authorization: `Bearer ${useCookie("token").value}`,
-      },
-    });
-
-    if (res.code === 200) {
-      ElMessage.success("访问限制配置保存成功");
-      applyAccessControlConfig(res.data);
-      setAccessControlConfig(res.data);
-    } else {
-      ElMessage.error(res.msg || "保存失败");
-    }
-  } catch (error) {
-    console.error("保存访问限制配置失败:", error);
-    ElMessage.error("保存访问限制配置失败");
-  } finally {
-    accessControlLoading.value = false;
-  }
-};
-
-const resetAccessControlForm = () => {
-  ElMessageBox.confirm("确定要恢复默认访问限制配置吗？", "提示", {
-    confirmButtonText: "确定",
-    cancelButtonText: "取消",
-    type: "warning",
-  }).then(() => {
-    applyAccessControlConfig(DEFAULT_ACCESS_CONTROL_CONFIG);
-    handleAccessControlSubmit();
-  });
 };
 
 const handleEmailSubmit = async () => {
@@ -1169,7 +1188,7 @@ const resetEmailForm = () => {
   });
 };
 
-// 获取配置
+// 夸克配置
 const getConfig = async () => {
   try {
     const res = await $fetch("/api/admin/settings/quark", {
@@ -1195,7 +1214,45 @@ const getConfig = async () => {
   }
 };
 
-// 保存配置
+const handleEnabledChange = (value) => {
+  if (!value) {
+    ElMessageBox.confirm(
+      "关闭转存功能将停止所有自动转存操作，是否继续？",
+      "警告",
+      {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      }
+    )
+      .then(() => {
+        handleSubmit();
+      })
+      .catch(() => {
+        form.enabled = true;
+      });
+  }
+};
+
+const resetApiUrl = () => {
+  form.apiUrl = DEFAULT_API_URL;
+};
+
+const resetForm = () => {
+  ElMessageBox.confirm("确定要重置所有配置吗？", "提示", {
+    confirmButtonText: "确定",
+    cancelButtonText: "取消",
+    type: "warning",
+  }).then(() => {
+    formRef.value?.resetFields();
+    form.apiUrl = DEFAULT_API_URL;
+    form.verificationEnabled = false;
+    form.shareLink = "";
+    form.accessVerificationShareLink = "";
+    form.accessDurationMinutes = DEFAULT_ACCESS_DURATION;
+  });
+};
+
 const handleSubmit = async () => {
   if (!formRef.value) return;
 
@@ -1205,7 +1262,6 @@ const handleSubmit = async () => {
 
     loading.value = true;
 
-    // 获取当前用户信息
     const userInfo = await $fetch("/api/user/info", {
       headers: {
         Authorization: `Bearer ${useCookie("token").value}`,
@@ -1247,11 +1303,7 @@ const handleSubmit = async () => {
   }
 };
 
-// 音乐验证码相关方法
-const musicFormRef = ref(null);
-const groupQrFormRef = ref(null);
-const accessControlFormRef = ref(null);
-
+// 音乐验证码
 const handleMusicEnabledChange = (value) => {
   if (!value) {
     ElMessageBox.confirm(
@@ -1270,14 +1322,12 @@ const handleMusicEnabledChange = (value) => {
         musicForm.enabled = true;
       });
   } else {
-    // 启用验证时也需要调用API更新字段
     handleMusicSubmit();
   }
 };
 
 const resetMusicPassword = () => {
   musicForm.password = "aipan.me2026";
-  // 调用API保存到数据库
   handleMusicSubmit();
 };
 
@@ -1289,7 +1339,6 @@ const resetMusicForm = () => {
   }).then(() => {
     musicFormRef.value?.resetFields();
     musicForm.password = "aipan.me2026";
-    // 调用API保存到数据库
     handleMusicSubmit();
   });
 };
@@ -1346,7 +1395,7 @@ const getMusicConfig = async () => {
   }
 };
 
-// 群二维码相关方法
+// 群二维码
 const handleGroupQrEnabledChange = (value) => {
   if (!value) {
     ElMessageBox.confirm(
@@ -1447,6 +1496,89 @@ const getGroupQrConfig = async () => {
   }
 };
 
+// 访问限制
+const applyAccessControlConfig = (config = DEFAULT_ACCESS_CONTROL_CONFIG) => {
+  accessControlForm.enabled =
+    config.enabled ?? DEFAULT_ACCESS_CONTROL_CONFIG.enabled;
+  accessControlForm.requireLogin =
+    config.requireLogin ?? DEFAULT_ACCESS_CONTROL_CONFIG.requireLogin;
+  accessControlForm.minPoints =
+    Number(config.minPoints ?? DEFAULT_ACCESS_CONTROL_CONFIG.minPoints);
+
+  Object.keys(DEFAULT_ACCESS_CONTROL_FEATURES).forEach((key) => {
+    accessControlForm.protectedFeatures[key] =
+      config.protectedFeatures?.[key] ?? DEFAULT_ACCESS_CONTROL_FEATURES[key];
+  });
+};
+
+const getAccessControlConfig = async () => {
+  try {
+    const res = await $fetch("/api/admin/settings/access-control", {
+      headers: {
+        Authorization: `Bearer ${useCookie("token").value}`,
+      },
+    });
+
+    if (res.code === 200) {
+      applyAccessControlConfig(res.data);
+    }
+  } catch (error) {
+    console.error("获取访问限制配置失败:", error);
+    ElMessage.error("获取访问限制配置失败");
+  }
+};
+
+const handleAccessControlSubmit = async () => {
+  if (!accessControlFormRef.value) return;
+
+  try {
+    const valid = await accessControlFormRef.value.validate();
+    if (!valid) return;
+
+    accessControlLoading.value = true;
+
+    const res = await $fetch("/api/admin/settings/access-control", {
+      method: "POST",
+      body: {
+        enabled: accessControlForm.enabled,
+        requireLogin: accessControlForm.requireLogin,
+        minPoints: accessControlForm.minPoints,
+        protectedFeatures: { ...accessControlForm.protectedFeatures },
+      },
+      headers: {
+        Authorization: `Bearer ${useCookie("token").value}`,
+      },
+    });
+
+    if (res.code === 200) {
+      ElMessage.success("访问限制配置保存成功");
+      applyAccessControlConfig(res.data);
+      setAccessControlConfig(res.data);
+    } else {
+      ElMessage.error(res.msg || "保存失败");
+    }
+  } catch (error) {
+    console.error("保存访问限制配置失败:", error);
+    ElMessage.error("保存访问限制配置失败");
+  } finally {
+    accessControlLoading.value = false;
+  }
+};
+
+const resetAccessControlForm = () => {
+  ElMessageBox.confirm("确定要恢复默认访问限制配置吗？", "提示", {
+    confirmButtonText: "确定",
+    cancelButtonText: "取消",
+    type: "warning",
+  }).then(() => {
+    applyAccessControlConfig(DEFAULT_ACCESS_CONTROL_CONFIG);
+    handleAccessControlSubmit();
+  });
+};
+
+// ============================================================
+// 生命周期
+// ============================================================
 onMounted(() => {
   getResourceTypes();
   getEmailConfig();
@@ -1454,6 +1586,7 @@ onMounted(() => {
   getMusicConfig();
   getGroupQrConfig();
   getAccessControlConfig();
+  getChatConfig();
 });
 </script>
 

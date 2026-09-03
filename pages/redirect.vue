@@ -464,10 +464,10 @@ const targetSubtitle = computed(() => {
   }
 
   if (targetCategoryName.value === "网盘链接") {
-    return `你即将离开 aipan.me，在当前标签页继续进入 ${targetServiceName.value}。米搜只做公开资源聚合，不托管文件本身，也不控制目标平台内容。`;
+    return `你即将离开 MISO，在当前标签页继续进入 ${targetServiceName.value}。米搜只做公开资源聚合，不托管文件本身，也不控制目标平台内容。`;
   }
 
-  return `你即将离开 aipan.me，访问外部站点。请在继续前核对域名、页面意图与资源说明。`;
+  return `你即将离开 MISO，访问外部站点。请在继续前核对域名、页面意图与资源说明。`;
 });
 
 const displayUrl = computed(() => {

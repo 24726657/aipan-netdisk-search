@@ -1,10 +1,10 @@
 <script setup>
-import { ref, onMounted, onBeforeUnmount, computed } from "vue";
-import { useColorMode, useRoute } from "#imports";
+import { ref, onMounted, onBeforeUnmount, computed, watch } from "vue";
+import { useColorMode, useRoute, useAsyncData } from "#imports";
 import { useUserStore } from "~/stores/user";
 import UserMenu from "~/components/common/UserMenu.vue";
 import { useI18n } from "vue-i18n";
-import { publicNavigation, isPublicNavItemActive, isPublicNavPathActive } from "~/utils/publicNavigation";
+import { getPublicNavigation, isPublicNavItemActive, isPublicNavPathActive } from "~/utils/publicNavigation";
 
 const colorMode = useColorMode();
 const router = useRouter();
@@ -19,7 +19,33 @@ const navMenuRef = ref(null);
 const { t, locale, locales, setLocale } = useI18n();
 const { latestReleaseTitle, hasUnreadRelease, markReleaseRead } = useReleaseNotice();
 
-// 获取可用的语言列表（当前语言除外）
+// 使用 useAsyncData 在组件初始化时获取聊天配置
+const { data: chatConfig } = useAsyncData('chatConfig', async () => {
+  try {
+    const res = await $fetch('/api/chat/config');
+    return res.data;
+  } catch (e) {
+    return { enabled: true };
+  }
+}, {
+  default: () => ({ enabled: true }),
+});
+
+// 聊天启用状态（响应式）
+const chatEnabled = ref(chatConfig.value?.enabled ?? true);
+
+// 监听 chatConfig 变化，更新 chatEnabled
+watch(chatConfig, (newVal) => {
+  chatEnabled.value = newVal?.enabled ?? true;
+}, { immediate: true });
+
+// 基础导航数据（只初始化一次）
+const navigationItems = ref(getPublicNavigation(true));
+
+// 过滤后的导航（用于渲染）
+const filteredNavigation = computed(() => navigationItems.value);
+
+// 获取可用的语言列表
 const availableLocales = computed(() => {
   return (locales.value).filter(i => i.code !== locale.value);
 });
@@ -55,11 +81,8 @@ const handleNavClick = (itemKey = "") => {
 };
 
 const isNavItemActive = (item) => isPublicNavItemActive(route.path, item);
-
 const isNavChildActive = (child) => isPublicNavPathActive(route.path, child.path);
-
 const showReleaseBadge = (key) => key === "releases" && hasUnreadRelease.value;
-
 const getChildTitle = (child) => {
   if (child.key === "releases") return latestReleaseTitle.value || "有新的发布日志";
   if (child.gated) return "需要登录";
@@ -72,19 +95,13 @@ const closeDropdown = (event) => {
   }
 };
 
-// 监听滚动事件
+// 滚动监听
 const handleScroll = () => {
   if (!headerRef.value) return;
-
   if (!headerHeight.value) {
     headerHeight.value = headerRef.value.offsetHeight;
   }
-
-  if (window.scrollY > 10) {
-    isHeaderFixed.value = true;
-  } else {
-    isHeaderFixed.value = false;
-  }
+  isHeaderFixed.value = window.scrollY > 10;
 };
 
 const headerClass = computed(() => {
@@ -99,7 +116,6 @@ onMounted(() => {
   userStore.ensureUserSession();
   window.addEventListener("scroll", handleScroll);
   document.addEventListener("click", closeDropdown);
-
   if (headerRef.value) {
     headerHeight.value = headerRef.value.offsetHeight;
   }
@@ -120,7 +136,6 @@ onBeforeUnmount(() => {
           <div
             class="flex cursor-pointer items-center justify-center gap-2 md:gap-2 hover:scale-105 transition-transform duration-300"
             @click="goHome()">
-            <!--<img class="w-6 h-6 md:w-12 md:h-12 dark:opacity-90" src="/logo-1.png" alt="logo" />-->
             <div class="text-left">
               <h1
                 class="text-xs md:text-sm font-bold bg-linear-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 bg-clip-text text-transparent">
@@ -132,76 +147,75 @@ onBeforeUnmount(() => {
             </div>
           </div>
 
-          <!-- 导航和工具区域 -->
-            <div class="flex items-center space-x-3">
-              <!-- 导航菜单 -->
-              <nav ref="navMenuRef" class="hidden sm:flex items-center gap-1">
-                <div v-for="item in publicNavigation" :key="item.key" class="relative">
-                  <nuxt-link
-                    v-if="item.path"
-                    :to="item.path"
+          <div class="flex items-center space-x-3">
+            <nav ref="navMenuRef" class="hidden sm:flex items-center gap-1">
+              <div v-for="item in filteredNavigation" :key="item.key" class="relative">
+                <nuxt-link
+                  v-if="item.path"
+                  :to="item.path"
+                  class="flex h-9 items-center gap-1.5 rounded-lg px-3 text-sm font-medium text-gray-600 transition-all duration-200 hover:bg-blue-50 hover:text-blue-600 dark:text-gray-300 dark:hover:bg-gray-800/80 dark:hover:text-blue-300"
+                  :class="isNavItemActive(item) ? 'bg-blue-50 text-blue-600 dark:bg-gray-800/80 dark:text-blue-300' : ''"
+                  @click="handleNavClick(item.key)"
+                >
+                  <i :class="item.icon" class="transition-opacity duration-200 dark:opacity-90"></i>
+                  {{ $t(item.labelKey) }}
+                </nuxt-link>
+
+                <template v-else>
+                  <button
                     class="flex h-9 items-center gap-1.5 rounded-lg px-3 text-sm font-medium text-gray-600 transition-all duration-200 hover:bg-blue-50 hover:text-blue-600 dark:text-gray-300 dark:hover:bg-gray-800/80 dark:hover:text-blue-300"
-                    :class="isNavItemActive(item) ? 'bg-blue-50 text-blue-600 dark:bg-gray-800/80 dark:text-blue-300' : ''"
-                    @click="handleNavClick(item.key)"
+                    :class="isNavItemActive(item) || navDropdownVisible === item.key ? 'bg-blue-50 text-blue-600 dark:bg-gray-800/80 dark:text-blue-300' : ''"
+                    @click.stop="toggleNavDropdown(item.key)"
                   >
                     <i :class="item.icon" class="transition-opacity duration-200 dark:opacity-90"></i>
                     {{ $t(item.labelKey) }}
-                  </nuxt-link>
+                    <span
+                      v-if="item.key === 'more' && hasUnreadRelease"
+                      class="h-2 w-2 rounded-full bg-red-500"
+                      :title="latestReleaseTitle || '有新的发布日志'"
+                    ></span>
+                    <i class="fa-solid fa-chevron-down text-[10px] transition-transform" :class="navDropdownVisible === item.key ? 'rotate-180' : ''"></i>
+                  </button>
 
-                  <template v-else>
-                    <button
-                      class="flex h-9 items-center gap-1.5 rounded-lg px-3 text-sm font-medium text-gray-600 transition-all duration-200 hover:bg-blue-50 hover:text-blue-600 dark:text-gray-300 dark:hover:bg-gray-800/80 dark:hover:text-blue-300"
-                      :class="isNavItemActive(item) || navDropdownVisible === item.key ? 'bg-blue-50 text-blue-600 dark:bg-gray-800/80 dark:text-blue-300' : ''"
-                      @click.stop="toggleNavDropdown(item.key)"
+                  <div
+                    v-show="navDropdownVisible === item.key"
+                    class="absolute left-0 top-full z-50 mt-2 w-56 overflow-hidden rounded-lg border border-gray-100 bg-white py-1 shadow-lg dark:border-gray-700 dark:bg-gray-800"
+                  >
+                    <!-- 关键修改：此处增加 v-if 条件 -->
+                    <nuxt-link
+                      v-for="child in item.children"
+                      v-if="child.key !== 'chat' || chatEnabled"
+                      :key="child.key"
+                      :to="child.path"
+                      :title="getChildTitle(child)"
+                      class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-600 transition-colors hover:bg-blue-50 hover:text-blue-600 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-blue-300"
+                      :class="isNavChildActive(child) ? 'bg-blue-50 text-blue-600 dark:bg-blue-500/10 dark:text-blue-300' : ''"
+                      @click="handleNavClick(child.key)"
                     >
-                      <i :class="item.icon" class="transition-opacity duration-200 dark:opacity-90"></i>
-                      {{ $t(item.labelKey) }}
+                      <i :class="child.icon" class="w-4 text-center"></i>
+                      <span class="min-w-0 flex-1 truncate">{{ $t(child.labelKey) }}</span>
                       <span
-                        v-if="item.key === 'more' && hasUnreadRelease"
-                        class="h-2 w-2 rounded-full bg-red-500"
-                        :title="latestReleaseTitle || '有新的发布日志'"
-                      ></span>
-                      <i class="fa-solid fa-chevron-down text-[10px] transition-transform" :class="navDropdownVisible === item.key ? 'rotate-180' : ''"></i>
-                    </button>
-
-                    <div
-                      v-show="navDropdownVisible === item.key"
-                      class="absolute left-0 top-full z-50 mt-2 w-56 overflow-hidden rounded-lg border border-gray-100 bg-white py-1 shadow-lg dark:border-gray-700 dark:bg-gray-800"
-                    >
-                      <nuxt-link
-                        v-for="child in item.children"
-                        :key="child.key"
-                        :to="child.path"
-                        :title="getChildTitle(child)"
-                        class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-600 transition-colors hover:bg-blue-50 hover:text-blue-600 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-blue-300"
-                        :class="isNavChildActive(child) ? 'bg-blue-50 text-blue-600 dark:bg-blue-500/10 dark:text-blue-300' : ''"
-                        @click="handleNavClick(child.key)"
+                        v-if="showReleaseBadge(child.key)"
+                        class="rounded-full bg-red-500 px-1.5 py-0.5 text-[10px] font-bold leading-none text-white"
                       >
-                        <i :class="child.icon" class="w-4 text-center"></i>
-                        <span class="min-w-0 flex-1 truncate">{{ $t(child.labelKey) }}</span>
-                        <span
-                          v-if="showReleaseBadge(child.key)"
-                          class="rounded-full bg-red-500 px-1.5 py-0.5 text-[10px] font-bold leading-none text-white"
-                        >
-                          NEW
-                        </span>
-                      </nuxt-link>
-                    </div>
-                  </template>
-                </div>
-              </nav>
+                        NEW
+                      </span>
+                    </nuxt-link>
+                  </div>
+                </template>
+              </div>
+            </nav>
 
-              <button
-                class="sm:hidden rounded-lg p-2 text-gray-600 transition-all duration-200 hover:bg-blue-50 hover:text-blue-600 dark:text-gray-300 dark:hover:bg-gray-800/80 dark:hover:text-blue-300"
-                :aria-label="isMobileMenuOpen ? '关闭菜单' : '打开菜单'"
-                @click="toggleMobileMenu"
-              >
-                <i v-if="!isMobileMenuOpen" class="fa-solid fa-bars"></i>
-                <i v-else class="fa-solid fa-xmark"></i>
-              </button>
+            <button
+              class="sm:hidden rounded-lg p-2 text-gray-600 transition-all duration-200 hover:bg-blue-50 hover:text-blue-600 dark:text-gray-300 dark:hover:bg-gray-800/80 dark:hover:text-blue-300"
+              :aria-label="isMobileMenuOpen ? '关闭菜单' : '打开菜单'"
+              @click="toggleMobileMenu"
+            >
+              <i v-if="!isMobileMenuOpen" class="fa-solid fa-bars"></i>
+              <i v-else class="fa-solid fa-xmark"></i>
+            </button>
 
-              <client-only>
-              <!-- 语言切换按钮 -->
+            <client-only>
               <div class="hidden sm:flex items-center space-x-2">
                 <button v-for="loc in availableLocales" :key="loc.code"
                   class="flex h-9 w-9 items-center justify-center rounded-lg bg-gray-100 text-gray-600 transition-all duration-300 hover:bg-gray-200 hover:text-blue-600 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-blue-300"
@@ -212,31 +226,29 @@ onBeforeUnmount(() => {
                 </button>
               </div>
 
-              <!-- 主题切换按钮 -->
               <button
                 class="p-2 rounded-lg transition-all duration-200 text-gray-600 hover:text-blue-600 hover:bg-blue-50 dark:text-gray-400 dark:hover:text-blue-300 dark:hover:bg-gray-800/80"
                 :aria-label="colorMode.preference === 'dark' ? '切换到浅色模式' : '切换到深色模式'"
                 :title="colorMode.preference === 'dark' ? '切换到浅色模式' : '切换到深色模式'"
-                @click="
-                  colorMode.preference =
-                  colorMode.preference === 'dark' ? 'light' : 'dark'
-                  ">
-                <i v-if="colorMode.preference === 'dark'"
-                  class="fa-solid fa-sun transition-transform duration-300 hover:rotate-90"></i>
+                @click="colorMode.preference = colorMode.preference === 'dark' ? 'light' : 'dark'"
+              >
+                <i v-if="colorMode.preference === 'dark'" class="fa-solid fa-sun transition-transform duration-300 hover:rotate-90"></i>
                 <i v-else class="fa-solid fa-moon transition-transform duration-300 hover:rotate-90"></i>
               </button>
-              <!-- 用户菜单 -->
+
               <UserMenu />
-              </client-only>
-            </div>
+            </client-only>
+          </div>
         </div>
       </div>
+
+      <!-- 移动端菜单 -->
       <div
         v-show="isMobileMenuOpen"
         class="sm:hidden border-t border-gray-200 bg-white shadow-lg dark:border-gray-700 dark:bg-gray-800"
       >
         <div class="max-h-[calc(100vh-64px)] overflow-y-auto py-2">
-          <template v-for="item in publicNavigation" :key="item.key">
+          <template v-for="item in filteredNavigation" :key="item.key">
             <nuxt-link
               v-if="item.path"
               :to="item.path"
@@ -253,8 +265,10 @@ onBeforeUnmount(() => {
                 <i :class="item.icon"></i>
                 {{ $t(item.labelKey) }}
               </div>
+              <!-- 移动端同样添加 v-if -->
               <nuxt-link
                 v-for="child in item.children"
+                v-if="child.key !== 'chat' || chatEnabled"
                 :key="child.key"
                 :to="child.path"
                 :title="getChildTitle(child)"
@@ -291,38 +305,23 @@ onBeforeUnmount(() => {
         </div>
       </div>
     </header>
-    <!-- 当header固定时，添加一个占位元素避免内容跳动 -->
     <div v-if="isHeaderFixed" :style="`height: ${headerHeight}px`"></div>
   </div>
 </template>
 
 <style scoped>
 @import "tailwindcss" reference;
-
 .router-link-active {
   @apply text-blue-600 bg-blue-50 dark:text-blue-300 dark:bg-gray-800/80;
 }
-
-/* 添加渐变动画 */
 @keyframes gradient {
-  0% {
-    background-position: 0% 50%;
-  }
-
-  50% {
-    background-position: 100% 50%;
-  }
-
-  100% {
-    background-position: 0% 50%;
-  }
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
-
-/* Logo hover 效果 */
 .logo-hover {
   position: relative;
 }
-
 .logo-hover::after {
   content: "";
   position: absolute;
@@ -334,11 +333,9 @@ onBeforeUnmount(() => {
   transform: scaleX(0);
   transition: transform 0.3s ease;
 }
-
 .logo-hover:hover::after {
   transform: scaleX(1);
 }
-
 :root.dark .logo-hover::after {
   background: linear-gradient(90deg, #60a5fa, #a78bfa);
 }
