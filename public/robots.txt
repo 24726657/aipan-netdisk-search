@@ -2,4 +2,4 @@ User-agent: *
 Disallow: /admin/
 
 # Sitemap
-Sitemap: https://www.aipan.me/sitemap_index.xml
+Sitemap: https://www.sjdh898.top/sitemap_index.xml
