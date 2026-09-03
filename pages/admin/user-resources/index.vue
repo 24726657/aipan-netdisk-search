@@ -91,7 +91,7 @@
               {{ formatDate(row.createdAt) }}
             </template>
           </el-table-column>
-          <el-table-column label="操作" width="200" fixed="right">
+          <el-table-column label="操作" width="280" fixed="right">
             <template #default="{ row }">
               <div class="flex items-center space-x-2">
                 <el-button
@@ -124,6 +124,14 @@
                   @click="handleViewResource(row)"
                 >
                   查看
+                </el-button>
+                <!-- 新增删除按钮 -->
+                <el-button
+                  type="danger"
+                  size="small"
+                  @click="handleDelete(row)"
+                >
+                  删除
                 </el-button>
               </div>
             </template>
@@ -355,6 +363,36 @@ const fetchResources = async () => {
   }
 };
 
+// 新增：删除资源
+const handleDelete = async (row) => {
+  try {
+    await ElMessageBox.confirm(
+      `确定要删除资源“${row.name}”吗？此操作不可恢复，且会同时从Elasticsearch中移除！`,
+      "确认删除",
+      {
+        confirmButtonText: "确定删除",
+        cancelButtonText: "取消",
+        type: "error",
+      }
+    );
+
+    await $fetch(`/api/admin/user-resources/${row.id}`, {
+      method: "DELETE",
+      headers: {
+        authorization: "Bearer " + useCookie("token").value,
+      },
+    });
+
+    ElMessage.success("删除成功");
+    fetchResources(); // 刷新列表
+  } catch (error) {
+    if (error !== "cancel") {
+      console.error("Failed to delete resource:", error);
+      ElMessage.error(error?.data?.message || "删除失败");
+    }
+  }
+};
+
 const handleAutoReview = async (dryRun) => {
   try {
     if (!dryRun) {
@@ -449,23 +487,12 @@ const handleEnqueueAutoReview = async () => {
 const handleUpdateStatus = async (id, status) => {
   try {
     await ElMessageBox.confirm(
-      `确定要${
-        status === "published"
-          ? "通过"
-          : status === "rejected"
-          ? "拒绝"
-          : "重置"
-      }这个资源吗？`,
+      `确定要${status === "published" ? "通过" : status === "rejected" ? "拒绝" : "重置"}这个资源吗？`,
       "确认操作",
       {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
-        type:
-          status === "published"
-            ? "success"
-            : status === "rejected"
-            ? "warning"
-            : "info",
+        type: status === "published" ? "success" : status === "rejected" ? "warning" : "info",
       }
     );
 

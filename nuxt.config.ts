@@ -79,13 +79,13 @@ export default defineNuxtConfig({
   app: {
     pageTransition: { name: 'page', mode: 'out-in' },
     head: {
-      title: '米搜 - 一站式资源聚合平台 | 网盘搜索·音乐·电影·游戏·直播',
+      title: '爱盼 - 一站式资源聚合平台 | 网盘搜索·音乐·电影·游戏·直播',
       htmlAttrs: {
         lang: 'zh-CN'
       },
       link: [
         { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
-        { rel: 'preload', as: 'image', type: 'image/webp', href: '/logo-1.webp', fetchpriority: 'high' },
+        { rel: 'preload', as: 'image', type: 'image/webp', href: '/logo.webp', fetchpriority: 'high' },
       ],
       meta: [
         { charset: 'utf-8' },
@@ -93,15 +93,15 @@ export default defineNuxtConfig({
         {
           name: 'keywords',
           content:
-            '米搜,网盘搜索,资源搜索,百度网盘,阿里云盘,夸克网盘,在线音乐,每日电影推荐,电视直播,FM电台,博客平台,休闲游戏,音乐播放器,TVBox,资源聚合,一站式娱乐',
+            '爱盼,网盘搜索,资源搜索,百度网盘,阿里云盘,夸克网盘,在线音乐,每日电影推荐,电视直播,FM电台,博客平台,休闲游戏,音乐播放器,TVBox,资源聚合,一站式娱乐',
         },
         {
           name: 'description',
           content:
-            '米搜是一站式资源聚合平台，集网盘搜索、在线音乐、每日电影推荐、TV直播、TVBox、休闲游戏和直播电台于一体。支持百度网盘、阿里云盘、夸克网盘多源搜索，资源检索和常用入口统一管理。',
+            '爱盼是一站式资源聚合平台，集网盘搜索、在线音乐、每日电影推荐、TV直播、TVBox、休闲游戏和直播电台于一体。支持百度网盘、阿里云盘、夸克网盘多源搜索，资源检索和常用入口统一管理。',
         },
-        { name: 'author', content: '米搜' },
-        { name: 'publisher', content: '米搜' },
+        { name: 'author', content: '爱盼' },
+        { name: 'publisher', content: '爱盼' },
         { name: 'robots', content: 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1' },
         { name: 'format-detection', content: 'telephone=no' },
         { name: 'theme-color', content: '#3b82f6' },
@@ -109,12 +109,12 @@ export default defineNuxtConfig({
         { name: 'apple-mobile-web-app-status-bar-style', content: 'black-translucent' },
         // Open Graph
         { property: 'og:type', content: 'website' },
-        { property: 'og:site_name', content: '米搜' },
-        { property: 'og:title', content: '米搜 - 一站式资源聚合平台 | 网盘搜索·音乐·电影·游戏·直播' },
+        { property: 'og:site_name', content: '爱盼' },
+        { property: 'og:title', content: '爱盼 - 一站式资源聚合平台 | 网盘搜索·音乐·电影·游戏·直播' },
         {
           property: 'og:description',
           content:
-            '米搜是一站式资源聚合平台，集网盘搜索、在线音乐、每日电影推荐、TV直播、TVBox、休闲游戏和直播电台于一体。支持百度网盘、阿里云盘、夸克网盘多源搜索。',
+            '爱盼是一站式资源聚合平台，集网盘搜索、在线音乐、每日电影推荐、TV直播、TVBox、休闲游戏和直播电台于一体。支持百度网盘、阿里云盘、夸克网盘多源搜索。',
         },
         { property: 'og:image', content: 'https://www.aipan.me/default-og-image.png' },
         { property: 'og:image:width', content: '1200' },
@@ -125,7 +125,7 @@ export default defineNuxtConfig({
         // Twitter Card
         { name: 'twitter:card', content: 'summary_large_image' },
         { name: 'twitter:site', content: '@aipanmi' },
-        { name: 'twitter:title', content: '米搜 - 一站式资源聚合平台' },
+        { name: 'twitter:title', content: '爱盼 - 一站式资源聚合平台' },
         {
           name: 'twitter:description',
           content: '网盘搜索、在线音乐、每日电影推荐、TV直播、TVBox、休闲游戏和直播电台，一个平台统一管理常用资源入口。',
@@ -209,10 +209,10 @@ export default defineNuxtConfig({
       wasm: true,
     },
     routeRules: {
-      '/logo-1.png': {
+      '/logo.png': {
         headers: { 'Cache-Control': 'public, max-age=31536000, immutable' },
       },
-      '/logo-1.webp': {
+      '/logo.webp': {
         headers: { 'Cache-Control': 'public, max-age=31536000, immutable' },
       },
     }
@@ -291,10 +291,10 @@ export default defineNuxtConfig({
     exclude: ['/admin/**', '/user/**'],
   },
   site: {
-    name: '米搜 - 一站式资源聚合平台',
+    name: '爱盼 - 一站式资源聚合平台',
     url: 'https://www.aipan.me',
     description:
-      '米搜是一站式资源聚合平台，集网盘搜索、在线音乐、每日电影推荐、TV直播、TVBox、休闲游戏和直播电台于一体。支持百度网盘、阿里云盘、夸克网盘多源搜索。',
+      '爱盼是一站式资源聚合平台，集网盘搜索、在线音乐、每日电影推荐、TV直播、TVBox、休闲游戏和直播电台于一体。支持百度网盘、阿里云盘、夸克网盘多源搜索。',
   },
   compatibilityDate: '2026-03-06',
 })

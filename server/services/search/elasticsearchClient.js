@@ -48,10 +48,10 @@ export function getElasticsearchBaseConfig(runtimeConfig = useRuntimeConfig()) {
       runtimeConfig.elasticsearchPassword ||
       process.env.ELASTICSEARCH_PASSWORD ||
       "",
-    caFingerprint:
-      runtimeConfig.elasticsearchCaFingerprint ||
-      process.env.ELASTICSEARCH_CA_FINGERPRINT ||
-      "",
+    // caFingerprint:
+    //   runtimeConfig.elasticsearchCaFingerprint ||
+    //   process.env.ELASTICSEARCH_CA_FINGERPRINT ||
+    //   "",
     requestTimeoutMs: parseInteger(
       runtimeConfig.elasticsearchRequestTimeoutMs ||
         process.env.NUXT_ELASTICSEARCH_REQUEST_TIMEOUT_MS ||
@@ -90,13 +90,7 @@ export function getResourceSearchConfig(runtimeConfig = useRuntimeConfig()) {
 }
 
 export function isUserResourceSearchConfigured(config = getUserResourceSearchConfig()) {
-  return Boolean(
-    config.node &&
-      config.username &&
-      config.password &&
-      config.caFingerprint &&
-      config.indexName
-  );
+  return Boolean(config.node && config.indexName);
 }
 
 function createSearchClient(config) {
@@ -106,7 +100,7 @@ function createSearchClient(config) {
       username: config.username,
       password: config.password,
     },
-    caFingerprint: config.caFingerprint,
+    // caFingerprint: config.caFingerprint,
     requestTimeout: config.requestTimeoutMs,
     pingTimeout: config.requestTimeoutMs,
     maxRetries: config.maxRetries,
@@ -136,7 +130,7 @@ export function getRequiredUserResourceSearchClient() {
   const client = getOptionalUserResourceSearchClient();
   if (!client) {
     throw new Error(
-      "Elasticsearch is not fully configured. Please set ELASTICSEARCH_NODE, ELASTICSEARCH_USERNAME, ELASTICSEARCH_PASSWORD, ELASTICSEARCH_CA_FINGERPRINT, and ELASTICSEARCH_USER_RESOURCE_INDEX."
+      "Elasticsearch is not fully configured. Please set ELASTICSEARCH_NODE, ELASTICSEARCH_USERNAME, ELASTICSEARCH_PASSWORD, and ELASTICSEARCH_USER_RESOURCE_INDEX."
     );
   }
 
@@ -200,13 +194,7 @@ let cachedResourceClient = null;
 let cachedResourceConfigKey = null;
 
 export function isResourceSearchConfigured(config = getResourceSearchConfig()) {
-  return Boolean(
-    config.node &&
-      config.username &&
-      config.password &&
-      config.caFingerprint &&
-      config.indexName
-  );
+  return Boolean(config.node && config.indexName);
 }
 
 export function getOptionalResourceSearchClient() {
@@ -228,7 +216,7 @@ export function getRequiredResourceSearchClient() {
   const client = getOptionalResourceSearchClient();
   if (!client) {
     throw new Error(
-      "Elasticsearch is not fully configured for resources. Please set ELASTICSEARCH_NODE, ELASTICSEARCH_USERNAME, ELASTICSEARCH_PASSWORD, ELASTICSEARCH_CA_FINGERPRINT, and ELASTICSEARCH_RESOURCE_INDEX."
+      "Elasticsearch is not fully configured for resources. Please set ELASTICSEARCH_NODE, ELASTICSEARCH_USERNAME, ELASTICSEARCH_PASSWORD, and ELASTICSEARCH_RESOURCE_INDEX."
     );
   }
 
